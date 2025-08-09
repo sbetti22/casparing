@@ -2,6 +2,7 @@ import CASPAR_util as cutil
 import CASPAR_fitMMdot as cfit
 import CASPAR_plotting as cplot
 import CASPAR_sortdata as csort
+
 from scipy.stats import norm
 from scipy.optimize import curve_fit
 from scipy import interpolate
@@ -22,7 +23,7 @@ linfit = pd.read_csv(fil, delimiter=',', comment='#', skiprows=[0])
 linfit = linfit.set_index('obj')
 linfit = linfit.replace(-1000, np.nan)
 
-def AccDiaglegend(ax, loc):
+def _AccDiaglegend(ax, loc, fs):
 
     color = cutil.AccDiagColor()
 
@@ -45,15 +46,6 @@ def AccDiaglegend(ax, loc):
     first_legend._legend_box.align = "left"
     ax.add_artist(first_legend)
         
-def plotmarkerlegend(ax, cS, cBD, cP, fs=12,loc='upper right'):
-    s1= ax.scatter([],[], color=cS, marker='o')
-    s2= ax.scatter([],[], color=cBD,  marker='D')
-    s3= ax.scatter([],[], color=cP,  marker='s')
-    second_leg = ax.legend([s1, s2, s3], ['Star', 'Brown Dwarf', 'Planetary Mass\nCompanion'], 
-    ncol=1, fontsize=fs/2, loc=loc,title_fontsize=fs/2, markerscale=0.5, 
-    labelcolor=[cS, cBD, cP], frameon=True, columnspacing=0.3,
-    handletextpad=0.1) 
-    second_leg.set_zorder(1000)
     
 def _run_scaleByMass(objs, REG, UPP, fitname, doUPP=True, db='CASPAR'):
     REG['log Mdot orig'] = REG['log Mdot'] 
@@ -80,23 +72,32 @@ def _run_scaleByMass(objs, REG, UPP, fitname, doUPP=True, db='CASPAR'):
 
 
 
-def MdotVSage(df_lit, df_caspar, colorby='Mass', cmap='turbo', s=20, fs=12, scaleByMass=True, mainlegend=True, markerlegend=True, mainloc='lower left',fitname='doLinearFit', markerlegendloc = 'lower left', **kwargs):
+
+def MdotVSage(df_caspar, colorby='mass', scaleByMass=True, fit_data=True, **kwargs):
+    
+    cmap=kwargs.get('cmap', 'turbo')
+    s = kwargs.get('s', 20)
+    fs = kwargs.get('fs', 12)
+    mainlegend= kwargs.get('mainlegend'), 
+    markerlegend=kwargs.get('markerlegend')
+    mainloc=kwargs.get('mainloc', 'lower left')
+    markerlegendloc = kwargs.get('markerlegendloc','lower left')
     dbname = kwargs.get('dbname', 'CASPAR')
+    fitname=kwargs.get('fitname','doLinearFit')
     xlim = kwargs.get('xlim', [5.5, 7.9])
     
     fig, ax = cplot.plot_createSinglePlot()
 
-    bd_all = csort.CASPAR_allValues(df_lit, df_caspar)
-    stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = csort.CASPAR_separateByMass(df_lit, df_caspar)
-    print('std log age = ', round(np.nanstd(bd_all['log Age']),3), 'yr ' )
+    stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = csort.CASPAR_separateByMass(df_caspar)
+    print('std log age = ', round(np.nanstd(df_caspar['log Age']),3), 'yr ' )
     
-    if colorby == 'AccDiag':
+    if colorby == 'accretion diagnostic':
         cS = Sreg['color']
         cB = BDreg['color']
         cP = Preg['color'] 
         cmap=None
-        AccDiaglegend(ax, mainloc)
-    elif colorby == 'Mass':
+        _AccDiaglegend(ax, mainloc, fs)
+    elif colorby == 'mass':
         cS = Sreg['log Mass']
         cB = BDreg['log Mass']
         cP = Preg['log Mass']
@@ -108,13 +109,11 @@ def MdotVSage(df_lit, df_caspar, colorby='Mass', cmap='turbo', s=20, fs=12, scal
         BDreg, BDupp = _run_scaleByMass(bds.copy(), BDreg.copy(), BDupp.copy(), 'all', db=dbname)
         Preg, Pupp = _run_scaleByMass(planets.copy(), Preg.copy(), Pupp.copy(), 'all', db=dbname)
         df_caspar, _ = _run_scaleByMass(df_caspar.copy(), df_caspar.copy(), df_caspar.copy(), 'all', doUPP=False, db=dbname)
-        df_lit,_ = _run_scaleByMass(df_lit.copy(), df_lit.copy(),df_lit.copy(), 'all', doUPP=False, db=dbname)
-        bd_all, _ = _run_scaleByMass(bd_all.copy(), bd_all.copy(),bd_all.copy(), 'all', doUPP=False, db=dbname)
         cmap=cmap
         
     im = _scatterplot(ax, Sreg['log Age'], Sreg['log Mdot'],Supp['log Age'], Supp['log Mdot'], c=cS, s=s,  alpha=0.65, marker='o', edgecolor='none',cmap=cmap)
     
-    if colorby == 'Mass':
+    if colorby == 'mass':
         cbaxes = fig.add_axes([0.91, 0.125, 0.03, 0.755])
         cbar = fig.colorbar(im, ax=ax, cax=cbaxes)
         cbar.set_label('log Mass ($M_\odot$)', fontsize=fs)
@@ -125,25 +124,28 @@ def MdotVSage(df_lit, df_caspar, colorby='Mass', cmap='turbo', s=20, fs=12, scal
     
     im = _scatterplot(ax, Preg['log Age'], Preg['log Mdot'], Pupp['log Age'], Pupp['log Mdot'], cP, s+3, cmap, 0.8, 's', 'k', lw=1)   
     
-    if fitname == 'lit_lines':
-        x = np.linspace(3.2, 8, 50)
-        y = -1.32 - (1.07 * x)
-        line1, = ax.plot(x,y,color='k',ls='-', zorder=4, linewidth=1)
-        ax.fill_between(x, y-0.5, y+0.5, color='gray', alpha=0.4, zorder=-1)
-    else:
-        print('max log Mdot = ',round(bd_all['log Mdot'].max(), 3), 'Msun/yr' )
-        fitparams = cfit.linmix_fitting(bd_all, fitname=fitname, xval='Age', 
-                                   plot=True, ax=ax, extend=False, as_list=False, color='k')
-        N, slope, slopeerrlow, slopeerrupp, intercept, intercepterrlow, intercepterrupp, stdfit, r2 = fitparams
-        print('best fit parameters')
-        print(f'N = {N}, std= {stdfit:.3}, R2 = {r2:.3}')
-        print(f'slope = {slope:.3}_{slopeerrlow:.3}^{slopeerrupp:.3}, intercept = {intercept:.3}_{intercepterrlow:.3}^{intercepterrupp:.3}')
+    if fit_data:
+        if fitname == 'lit_lines':
+            x = np.linspace(3.2, 8, 50)
+            y = -1.32 - (1.07 * x)
+            line1, = ax.plot(x,y,color='k',ls='-', zorder=4, linewidth=1)
+            ax.fill_between(x, y-0.5, y+0.5, color='gray', alpha=0.4, zorder=-1)
+        else:
+            if fitname != 'doLinearFit':
+                fitname = fitname + ' MdotVSAge'
+            print('max log Mdot = ',round(df_caspar['log Mdot'].max(), 3), 'Msun/yr' )
+            fitparams = cfit.linmix_fitting(df_caspar, fitname=fitname, xval='Age', 
+                                       plot=False, ax=ax, extend=False, as_list=False, color='k')
+            N, slope, slopeerrlow, slopeerrupp, intercept, intercepterrlow, intercepterrupp, stdfit, r2 = fitparams
+            print('best fit parameters')
+            print(f'N = {N}, std= {stdfit:.3}, R2 = {r2:.3}')
+            print(f'slope = {slope:.3}_{slopeerrlow:.3}^{slopeerrupp:.3}, intercept = {intercept:.3}_{intercepterrlow:.3}^{intercepterrupp:.3}')
 
     #### LEGEND
     if markerlegend:
         if colorby != 'object':
             cS, cB, cP = 'k', 'k', 'k'
-        plotmarkerlegend(ax, cS, cB, cP, fs=fs,loc=markerlegendloc)
+        cplot.plot_objtype_legend(ax, cS, cB, cP, fs=fs,loc=markerlegendloc)
     
     ax.set_xlabel('log Age (yr)', fontsize=fs)
     ax.set_ylabel(r'log $\dot{M}\ (M_\odot)$', fontsize = fs)
@@ -180,27 +182,27 @@ def _scatterplot(ax, X, Y, Xupp, Yupp, c, s, cmap, alpha, marker, edgecolor, lw=
     
 
 
-def _age_grouping(df_lit, df_caspar, age, i, group=True):
+def _age_grouping(df_caspar, age, i, group=True):
     if (i == 0) and group==True:
         
-        df_ageorigS, df_ageupdateS = csort.CASPAR_separateByAge(df_lit, df_caspar, age[i], age[i+1])
-        stars, _, planets, [Sreg, Supp], _, [Preg, Pupp] = csort.CASPAR_separateByMass(df_ageorigS, df_ageupdateS)     
-        df_ageorig, df_ageupdate = csort.CASPAR_separateByAge(df_lit, df_caspar, age[i], age[i+2])
-        _, bds, _, _, [BDreg, BDupp],_ = csort.CASPAR_separateByMass(df_ageorig, df_ageupdate)
+        df_ageupdateS = csort.CASPAR_separateByAge(df_caspar, age[i], age[i+1])
+        stars, _, planets, [Sreg, Supp], _, [Preg, Pupp] = csort.CASPAR_separateByMass(df_ageupdateS)     
+        df_ageupdate = csort.CASPAR_separateByAge(df_caspar, age[i], age[i+2])
+        _, bds, _, _, [BDreg, BDupp],_ = csort.CASPAR_separateByMass(df_ageupdate)
 
     elif (i == 1) and group==True:
         
-        df_ageorigS, df_ageupdateS = csort.CASPAR_separateByAge(df_lit, df_caspar, age[i], age[i+1])
-        stars, _, planets, [Sreg, Supp], _, [Preg, Pupp] = csort.CASPAR_separateByMass(df_ageorigS, df_ageupdateS)
+        df_ageupdateS = csort.CASPAR_separateByAge(df_caspar, age[i], age[i+1])
+        stars, _, planets, [Sreg, Supp], _, [Preg, Pupp] = csort.CASPAR_separateByMass(df_ageupdateS)
         
-        df_ageorig, df_ageupdate = csort.CASPAR_separateByAge(df_lit, df_caspar, age[i-1], age[i+1])
-        _, bds, _, _, [BDreg, BDupp],_ = csort.CASPAR_separateByMass(df_ageorig, df_ageupdate)
+        df_ageupdate = csort.CASPAR_separateByAge(df_caspar, age[i-1], age[i+1])
+        _, bds, _, _, [BDreg, BDupp],_ = csort.CASPAR_separateByMass(df_ageupdate)
 
     else:
       
-        df_ageorig, df_ageupdate = csort.CASPAR_separateByAge(df_lit, df_caspar, age[i], age[i+1])
-        stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = csort.CASPAR_separateByMass(df_ageorig, df_ageupdate)                                                  
-    return df_ageorig, df_ageupdate, stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp]
+        df_ageupdate = csort.CASPAR_separateByAge(df_caspar, age[i], age[i+1])
+        stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = csort.CASPAR_separateByMass(df_ageupdate)                                                  
+    return df_ageupdate, stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp]
     
     
 
@@ -236,7 +238,7 @@ def _fit_mass_regions(df, object_type):
         return [np.nan], [np.nan], [np.nan], [np.nan], None,None
 
                         
-def MMdotVSage(df_lit, df_caspar, fit_mass_regions=True, group=True):
+def MMdotVSage(df_caspar, fit_mass_regions=True, group=True):
     age, _, _, _ = cplot.plot_age()
     AGE = []
     AGEerr = []
@@ -245,7 +247,7 @@ def MMdotVSage(df_lit, df_caspar, fit_mass_regions=True, group=True):
     DBL = []
     DBLerr = []
     for i in np.arange(len(age)-1):
-        df_ageorig, df_ageupdate, stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = _age_grouping(df_lit, df_caspar, age, i, group)
+        df_ageupdate, stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = _age_grouping(df_caspar, age, i, group)
         
         AGE.append(np.mean([age[i], age[i+1]]))
         AGEerr.append(df_ageupdate['Age err'].median())
@@ -259,9 +261,9 @@ def MMdotVSage(df_lit, df_caspar, fit_mass_regions=True, group=True):
             HBLerr_fin = [s_HBLerr, bd_HBLerr]
             
         else:
-            bd_all = csort.CASPAR_allValues(df_ageorig, df_ageupdate)
-            bd_all2 = bd_all.loc[bd_all['Companion']!= 'COM']
-            DBL_fin, DBLerr_fin, HBL_fin, HBLerr_fin, allslope, allintercept = _fit_mass_regions(bd_all2, 'all')
+
+            df_caspar2 = df_caspar.loc[df_caspar['Companion']!= 'COM']
+            DBL_fin, DBLerr_fin, HBL_fin, HBLerr_fin, allslope, allintercept = _fit_mass_regions(df_caspar2, 'all')
         HBL.append(HBL_fin)
         HBLerr.append(HBLerr_fin)
         DBL.append(DBL_fin)
@@ -269,7 +271,8 @@ def MMdotVSage(df_lit, df_caspar, fit_mass_regions=True, group=True):
 
     return AGE, AGEerr, [HBL, DBL], [HBLerr, DBLerr]
 
-def plot_MMdotVSage(df_lit, df_caspar, fs, group=True, fit_mass_regions=True, plot_residuals=True, plot_pdf=True, **kwargs):
+def plot_MMdotVSage(df_caspar, group=True, fit_mass_regions=True, plot_residuals=True, plot_pdf=True, **kwargs):
+    fs = kwargs.get('fs', 12)
     if plot_residuals:
         if plot_pdf:
             fig, ((ax, No_ax), (axN, axP)) = plt.subplots(dpi=150,nrows=2, ncols=2,figsize=(5,4), gridspec_kw={'width_ratios':[3,1], 'height_ratios':[1.5,1]})
@@ -281,7 +284,7 @@ def plot_MMdotVSage(df_lit, df_caspar, fs, group=True, fit_mass_regions=True, pl
 
     else:
         fig, ax = cplot.plot_createSinglePlot()
-    cplot.plot_graylines(ax, df_lit, df_caspar)
+    cplot.plot_graylines(ax, df_caspar)
     
     bdx = np.linspace(-1.9, -1.12, 50) # BD
     sx = np.linspace(-1.12, 5, 50) #star
@@ -311,7 +314,7 @@ def plot_MMdotVSage(df_lit, df_caspar, fs, group=True, fit_mass_regions=True, pl
             
         age_residuals = []
             
-        df_ageorig, df_ageupdate, stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = _age_grouping(df_lit, df_caspar, age, i, group=group)
+        df_ageupdate, stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = _age_grouping(df_caspar, age, i, group=group)
             
         ax.scatter([],[], marker=mm, color=cc, label=label, s=20, zorder=i)
         if len(stars)>0:
@@ -349,17 +352,17 @@ def plot_MMdotVSage(df_lit, df_caspar, fs, group=True, fit_mass_regions=True, pl
                                 
             
         else:
-            df_all = csort.CASPAR_allValues(df_ageorig, df_ageupdate)
-            df_all2 = df_all.loc[df_all['Companion']!= 'COM']
-            _, _, _, _, slope, intercept = _fit_mass_regions(df_all2, 'all')
+ 
+            df_caspar2 = df_caspar.loc[df_caspar['Companion']!= 'COM']
+            _, _, _, _, slope, intercept = _fit_mass_regions(df_caspar2, 'all')
             
             ax.plot(allx, slope*allx + intercept, '-', color=darkc[i], linewidth=2)
                
             if plot_residuals:
                 f = interpolate.interp1d(allx,slope*allx+intercept)
-                df_allreg, df_allupp = csort.CASPAR_separateByUppLimit(df_all2)
-                cplot.plot_MMdot(axN, df_allreg['log Mass'], df_allreg['log Mdot']-f(df_allreg['log Mass']), df_allupp['log Mass'], df_allupp['log Mdot']-f(df_allupp['log Mass']), s=s, color=cc, marker=mm, edgecolor='none', alpha=0.6, zorder=zorder)
-                age_residuals.extend((df_all2['log Mdot']-f(df_all2['log Mass'])).values)
+                df_casparreg, df_casparupp = csort.CASPAR_separateByUppLimit(df_caspar2)
+                cplot.plot_MMdot(axN, df_casparreg['log Mass'], df_casparreg['log Mdot']-f(df_casparreg['log Mass']), df_casparupp['log Mass'], df_casparupp['log Mdot']-f(df_casparupp['log Mass']), s=s, color=cc, marker=mm, edgecolor='none', alpha=0.6, zorder=zorder)
+                age_residuals.extend((df_caspar2['log Mdot']-f(df_caspar2['log Mass'])).values)
                 
         if plot_residuals:
             combo_age_residuals.extend(age_residuals) 
@@ -370,7 +373,7 @@ def plot_MMdotVSage(df_lit, df_caspar, fs, group=True, fit_mass_regions=True, pl
     if plot_residuals and plot_pdf:
         _, bins, _ = axP.hist(combo_age_residuals, color='k', histtype='step', orientation='horizontal', bins=12, density=True, label=r'$M$-$\dot{M}$ age fit')
         if fit_mass_regions:
-            stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = csort.CASPAR_separateByMass(df_lit, df_caspar)
+            stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = csort.CASPAR_separateByMass(df_caspar)
             
             sy = linfit.at['CASPAR stars', 'slope']*sx + linfit.at['CASPAR stars', 'intercept']
             fstar = interpolate.interp1d(sx,sy)
@@ -384,10 +387,10 @@ def plot_MMdotVSage(df_lit, df_caspar, fs, group=True, fit_mass_regions=True, pl
             all_pdf_label = r'$M$-$\dot{M}$ star/BD fit'
             
         else:
-            bd_all = csort.CASPAR_allValues(df_lit, df_caspar)
+  
             ally = linfit.at['CASPAR all', 'slope']*allx + linfit.at['CASPAR all', 'intercept']
             fall = interpolate.interp1d(allx,ally)
-            combo_all_residuals = bd_all['log Mdot']-fall(bd_all['log Mass'])
+            combo_all_residuals = df_caspar['log Mdot']-fall(df_caspar['log Mass'])
             all_pdf_label = r'$M$-$\dot{M}$ fit'
             
         axP.hist(combo_all_residuals, color='gray', orientation='horizontal', histtype='stepfilled', bins=12, density=True, zorder=0, alpha=0.6,label=all_pdf_label)
@@ -509,8 +512,8 @@ def _interceptVSAge(ax, x,xerr,y, yerr, fit_mass_regions=True, **kwargs):
         ax.plot(xx, func(vals, xx), linestyle=ls,color='darkcyan', linewidth=1)
         ax.plot([],[], color='k', linestyle=ls,  linewidth=1)
         
-def interceptVSAge(df_lit, df_caspar, fit_mass_regions=True, **kwargs):
-    x, xerr, y, yerr = MMdotVSage(df_lit, df_caspar, fit_mass_regions=fit_mass_regions, group=True) 
+def interceptVSAge(df_caspar, fit_mass_regions=True, **kwargs):
+    x, xerr, y, yerr = MMdotVSage(df_caspar, fit_mass_regions=fit_mass_regions, group=True) 
 
     fig, ax = cplot.plot_createSinglePlot()
     
@@ -537,12 +540,13 @@ def interceptVSAge(df_lit, df_caspar, fit_mass_regions=True, **kwargs):
     return fig, ax
  
 
-def BDMdotvsAgeInteractionModel(df_lit, df_caspar, fs, **kwargs):
+def BDMdotvsAgeInteractionModel(df_caspar, **kwargs):
+    fs = kwargs.get('fs', 8)
     fig, ax = cplot.plot_createSinglePlot()
 
     marker='D'
 
-    stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = csort.CASPAR_separateByMass(df_lit, df_caspar)
+    stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = csort.CASPAR_separateByMass(df_caspar)
     df_caspar = df_caspar.loc[df_caspar['Companion']!='COM']
     
     reg, upp = csort.CASPAR_separateByUppLimit(df_caspar)
@@ -641,13 +645,13 @@ def BDMdotvsAgeInteractionModel(df_lit, df_caspar, fs, **kwargs):
 
 
 
-def BDMdotvsAgeInteractionModelRES(df_lit, df_caspar, fs, **kwargs):
-    
+def BDMdotvsAgeInteractionModelRES(df_caspar, **kwargs):
+    fs = kwargs.get('fs', 6)
     fig, (ax, ax2) = plt.subplots(figsize=(5,4), dpi=300, nrows=2, ncols=1, sharey=False, gridspec_kw={'height_ratios':[3,1], 'wspace':0, 'hspace':0})
     
     marker='D'
 
-    stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = csort.CASPAR_separateByMass(df_lit, df_caspar)
+    stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = csort.CASPAR_separateByMass(df_caspar)
     df_caspar = df_caspar.loc[df_caspar['Companion']!='COM']
     
     reg, upp = csort.CASPAR_separateByUppLimit(df_caspar)

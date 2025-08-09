@@ -7,8 +7,9 @@ import numpy as np
 #import CASPAR_util as cutil
 #colors = cutil.AccDiagColor()
 
-def MdotVSMassVSSFR(df_lit, df_caspar, fs=12 , lit_lines=True, **kwargs):
-    fig, axes = plt.subplots(figsize=(4,6), nrows=5, ncols=2, dpi=150, sharex=True, sharey=True)
+def MdotVSmassVSsfr(df_caspar, lit_lines=True, **kwargs):
+    fs = kwargs.get('fs', 8)
+    fig, axes = plt.subplots(figsize=(6,8), nrows=5, ncols=2, dpi=150, sharex=True, sharey=True)
     axi = axes.flatten()
 
     cluster = {'Lagoon Nebula':[1326, 'p'], 'Chamaeleon I':[190, '^'],'Taurus':[135, 'x'],'σ Ori':[406, 'd'],'p Oph':[150, '3'],'Lupus':[158, 'P'],  'TW Hya':[51, '4'],'Upper Scorpius':[141,'<'],'n Chamaeleontis':[94, 'h'], 
@@ -18,19 +19,13 @@ def MdotVSMassVSSFR(df_lit, df_caspar, fs=12 , lit_lines=True, **kwargs):
                  'X', '<', 'd',  '8', '>']
     cluster_all, marker_all = cplot.plot_cluster(dist=False)
     col = cm.jet(np.linspace(0.2, 1, len(cluster_all)-1))
-    print(len(col))
-    print(cluster_all)
     for i, name in enumerate(list(cluster.keys())):
         ax = axi[i]
-        print(name)
         ind = np.where(np.array(cluster_all)==name)[0][0]
-        print(ind)
         color=col[ind]
         
         CLUSTER_DB = df_caspar.loc[df_caspar['Main Association'].str.contains(name)]
 
-        CLUSTER_DBorig = df_lit.loc[df_lit['Main Association'].str.contains(name)]
-        
         meanage = int(CLUSTER_DB['Age'].median())
         if name == 'Lagoon Nebula':
             meanage = 0.5
@@ -38,17 +33,17 @@ def MdotVSMassVSSFR(df_lit, df_caspar, fs=12 , lit_lines=True, **kwargs):
         
         NAMES = CLUSTER_DB['Unique Name'].unique()
         
-        cplot.plot_graylines(ax, CLUSTER_DBorig, CLUSTER_DB)
+        cplot.plot_graylines(ax, CLUSTER_DB)
          
-        stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = csort.CASPAR_separateByMass(CLUSTER_DBorig, CLUSTER_DB)
+        stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = csort.CASPAR_separateByMass(CLUSTER_DB)
         
-        cplot.plot_MMdot(ax, Sreg['log Mass'], Sreg['log Mdot'], Supp['log Mass'], Supp['log Mdot'], color_cmap=False, s=12, color=[color], marker=marker[i], edgecolor='none', alpha=0.7, zorder=10)
+        cplot.plot_MMdot(ax, Sreg['log Mass'], Sreg['log Mdot'], Supp['log Mass'], Supp['log Mdot'], color_cmap=False, s=16, color=[color], marker=marker[i], edgecolor='none', alpha=0.7, zorder=10)
 
-        cplot.plot_MMdot(ax, BDreg['log Mass'], BDreg['log Mdot'], BDupp['log Mass'], BDupp['log Mdot'], color_cmap=False, s=12, color=[color], marker=marker[i], edgecolor='none', alpha=0.7, zorder=10)
+        cplot.plot_MMdot(ax, BDreg['log Mass'], BDreg['log Mdot'], BDupp['log Mass'], BDupp['log Mdot'], color_cmap=False, s=16, color=[color], marker=marker[i], edgecolor='none', alpha=0.7, zorder=10)
 
-        cplot.plot_MMdot(ax, Preg['log Mass'], Preg['log Mdot'], Pupp['log Mass'], Pupp['log Mdot'], color_cmap=False, s=12, color=[color], marker=marker[i], edgecolor='k', alpha=0.7, zorder=10)
+        cplot.plot_MMdot(ax, Preg['log Mass'], Preg['log Mdot'], Pupp['log Mass'], Pupp['log Mdot'], color_cmap=False, s=16, color=[color], marker=marker[i], edgecolor='k', alpha=0.7, zorder=10)
         
-        cplot.plot_MMdotFeatures(fig, ax, fs=fs,fs_BL=3)
+        cplot.plot_MMdotFeatures(fig, ax, fs=fs,fs_BL=4, **kwargs)
         
 
         ############## LINE FITTING ######################

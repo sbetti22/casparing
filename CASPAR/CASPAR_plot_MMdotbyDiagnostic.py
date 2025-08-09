@@ -57,7 +57,7 @@ def MdotMplot(ax, a, b, diag, **kwargs):
     cplot.plot_MMdot(ax, Areg['log Mass'], Areg['log Mdot'], Aupp['log Mass'], Aupp['log Mdot'], **kwargs)
     cplot.plot_MMdot(ax, Breg['log Mass'], Breg['log Mdot'], Bupp['log Mass'], Bupp['log Mdot'], **kwargs)
         
-def MdotbyDiagnostic(df_lit, df_caspar, cols=3,fit_mass_regions=True, fitname='doLinearFit',fig=None, ax=None,title=True, **kwargs):
+def MdotbyDiagnostic(df_caspar, cols=3,fit_data=True, fig=None, ax=None,title=True, **kwargs):
     '''
     kwargs: labelC - boolean
     marker
@@ -67,7 +67,12 @@ def MdotbyDiagnostic(df_lit, df_caspar, cols=3,fit_mass_regions=True, fitname='d
     alpha
     lines
     binn
+    fit_mass_regions
+    fitname
     '''
+    fit_mass_regions= kwargs.get('fit_mass_regions')
+    
+    fitname=kwargs.get('fitname','doLinearFit')
     if fig is None:
         fig, (ax1, ax2, ax3,ax4) = plt.subplots(figsize=(8,2.4), nrows=1,ncols=4,dpi=150, sharey=True)
         ax = [ax1, ax2, ax3, ax4]
@@ -81,8 +86,8 @@ def MdotbyDiagnostic(df_lit, df_caspar, cols=3,fit_mass_regions=True, fitname='d
         print(diag)
         plotfeatures(ax[i])
         
-        bd_all = csort.CASPAR_allValues(df_lit, df_caspar)
-        a = bd_all.loc[bd_all['AD']==diag]
+        
+        a = df_caspar.loc[df_caspar['AD']==diag]
         reg, upp = csort.CASPAR_separateByUppLimit(a)
         cplot.plot_MMdot(ax[i], reg['log Mass'], reg['log Mdot'], upp['log Mass'], upp['log Mdot'], 
                              color=colors[diag], **kwargs)
@@ -95,7 +100,7 @@ def MdotbyDiagnostic(df_lit, df_caspar, cols=3,fit_mass_regions=True, fitname='d
         
         if diag=='Hα 10% width':  
             line = accdiaglines[diag]
-            b = bd_all.loc[bd_all[f'{line} Accretion Rate'].notnull()]
+            b = df_caspar.loc[df_caspar[f'{line} Accretion Rate'].notnull()]
             breg, bupp = csort.CASPAR_separateByUppLimit(b)
             b[f'{line} log Mdot err'] = np.nanmedian(a['log Mdot err'])
             b[f'{line} Upper Limit bool'] = b[f'{line} Upper Limit'] != 'UPP' # true is detected, false is upper limit
@@ -193,21 +198,20 @@ def MdotbyDiagnostic(df_lit, df_caspar, cols=3,fit_mass_regions=True, fitname='d
         plt.show()
     
 
-def MdotVsAccDiagresiduals(df_lit, df_caspar, fs=8, **kwargs):
+def MdotVsAccDiagresiduals(df_caspar, **kwargs):
+    fs = kwargs.get('fs', 8)
     fig, ax = cplot.plot_createSinglePlot(figsize=(4,2))
     ax.axvline(x = -1.124938736, color = 'dimgray', linestyle='-', alpha=0.4, linewidth=0.5)
     ax.axvline(x = -1.906371, color = 'dimgray', linestyle='-', alpha=0.4, linewidth=0.5)
     df = df_caspar.sort_values(by='AD', ascending=True)
-    AD = np.flip(df_lit['AD'].unique())
-    bd_all = csort.CASPAR_allValues(df_lit, df_caspar)
-    
+    AD = np.flip(df_caspar['AD'].unique())
+        
     mark = 'o'
     bins = 8
 
-    DF = bd_all
+    DF = df_caspar
     VALS = np.sort(DF['AD'].unique())
     for AD in VALS:
-        print(AD)
         
         if (AD =='Continuum Excess') | (AD == 'Line Luminosity'):
             if AD == 'Line Luminosity':
@@ -216,7 +220,7 @@ def MdotVsAccDiagresiduals(df_lit, df_caspar, fs=8, **kwargs):
                 col=colors[AD]
             x = DF['log Mass'].loc[DF['AD']==AD].values
             y = DF['log Mdot'].loc[DF['AD']==AD].values
-            print(y)
+ 
             XX, YY, YYerr = cutil.binn(x, y, nbins=bins, plot=False)
 
             s = np.linspace(5,40,len(XX))
@@ -237,14 +241,14 @@ def MdotVsAccDiagresiduals(df_lit, df_caspar, fs=8, **kwargs):
         plt.savefig(kwargs['savefig'], dpi=300,transparent=False)
     plt.show()    
     
-def MdotVsAccDiagAll(df_lit, df_caspar, fs=8, fig=None, ax=None,**kwargs):
+def MdotVsAccDiagAll(df_caspar,  fig=None, ax=None,**kwargs):
+    fs = kwargs.get('fs',8)
     if fig is None:
         fig, ax = cplot.plot_createSinglePlot()
     
     df = df_caspar.sort_values(by='AD', ascending=True)
-    AD = np.flip(df_lit['AD'].unique())
-    bd_all = csort.CASPAR_allValues(df_lit, df_caspar)
-    
+    AD = np.flip(df_caspar['AD'].unique())
+        
     mark = 'o'
     bins = 7
 
@@ -253,11 +257,11 @@ def MdotVsAccDiagAll(df_lit, df_caspar, fs=8, fig=None, ax=None,**kwargs):
     for i, name in enumerate(labels):
         valpos[name] = i+1
 
-    VALS = np.sort(bd_all['AD'].unique())
+    VALS = np.sort(df_caspar['AD'].unique())
     XXfin, YYfin, YYerrfin = [], [],[]
     for AD in VALS:
-        x = bd_all['log Mass'].loc[bd_all['AD']==AD].values
-        y = bd_all['log Mdot'].loc[bd_all['AD']==AD].values
+        x = df_caspar['log Mass'].loc[df_caspar['AD']==AD].values
+        y = df_caspar['log Mdot'].loc[df_caspar['AD']==AD].values
         XX, YY, YYerr = cutil.binn(x, y, nbins=bins, plot=False)
         XXfin.append(XX)
         YYfin.append(YY)
@@ -348,19 +352,19 @@ def Ha10VSFlux(df_caspar, **kwargs):
         plt.savefig(kwargs['savefig'], dpi=300,transparent=False)
     plt.show()
     
-def Ha10VSexcess(df_lit, df_caspar, **kwargs):
-    bd_all = csort.CASPAR_allValues(df_lit, df_caspar)
-    IND = (~bd_all['Ha 10%'].isna()) & (bd_all['Accretion Diagnostic']=='Continuum Excess')
+def Ha10VSexcess(df_caspar, **kwargs):
     
-    Ha10 = bd_all['Ha 10%'][IND].values
-    UV = bd_all['Accretion Rate'][IND].values
-    UVerr = bd_all['Accretion Rate err'][IND].values
+    IND = (~df_caspar['Ha 10%'].isna()) & (df_caspar['Accretion Diagnostic']=='Continuum Excess')
+    
+    Ha10 = df_caspar['Ha 10%'][IND].values
+    UV = df_caspar['Accretion Rate'][IND].values
+    UVerr = df_caspar['Accretion Rate err'][IND].values
     UVlogerr = 0.434 * UV/UVerr
     
-    d = bd_all['Distance'][IND].values
-    M = bd_all['Mass'][IND].values
-    age = bd_all['Age'][IND].values
-    COM = bd_all['Companion'][IND].values
+    d = df_caspar['Distance'][IND].values
+    M = df_caspar['Mass'][IND].values
+    age = df_caspar['Age'][IND].values
+    COM = df_caspar['Companion'][IND].values
 
     fig, (ax1, ax2) = plt.subplots(figsize=(6,8), ncols=1, nrows=2)
     for i in np.arange(len(Ha10)):
@@ -399,8 +403,11 @@ def Ha10VSexcess(df_lit, df_caspar, **kwargs):
     plt.show()
     
     
-def MdotbyNIRLineDiagnostic(df_lit, df_caspar, fs=14, fit_mass_regions=True,fitname='doLinearFit',**kwargs):
-    bd_all = csort.CASPAR_allValues(df_lit, df_caspar)
+def MdotbyNIRLineDiagnostic(df_caspar, fit_data=True, **kwargs):
+    fs = kwargs.get('fs', 14)
+    fit_mass_regions=kwargs.get('fit_mass_regions')
+    fitname=kwargs.get('fitname', 'doLinearFit')
+    
     fig = plt.figure(figsize=(10,8))
     gs0 = gridspec.GridSpec(2, 2, figure=fig)
 
@@ -470,11 +477,11 @@ def MdotbyNIRLineDiagnostic(df_lit, df_caspar, fs=14, fit_mass_regions=True,fitn
         ALL_MDOTSerr = np.array([])
         ALL_UPP = np.array([])
         for line in accdiaglines[diag]:
-            bd_all[f'{line} log Mdot'] = np.log10(bd_all[f'{line} Accretion Rate'])
-            bd_all[f'{line} log Mdot err'] = 0.434 * bd_all[f'{line} Accretion Rate err']/bd_all[f'{line} Accretion Rate']
-            bd_all[f'{line} Upper Limit bool'] = bd_all[f'{line} Upper Limit'] != 'UPP'
+            df_caspar[f'{line} log Mdot'] = np.log10(df_caspar[f'{line} Accretion Rate'])
+            df_caspar[f'{line} log Mdot err'] = 0.434 * df_caspar[f'{line} Accretion Rate err']/df_caspar[f'{line} Accretion Rate']
+            df_caspar[f'{line} Upper Limit bool'] = df_caspar[f'{line} Upper Limit'] != 'UPP'
             
-            a = bd_all.loc[(bd_all[f'{line} Accretion Rate'].notnull()&(bd_all[f'{line} Upper Limit']!='UPP'))]
+            a = df_caspar.loc[(df_caspar[f'{line} Accretion Rate'].notnull()&(df_caspar[f'{line} Upper Limit']!='UPP'))]
             reg, upp = csort.CASPAR_separateByUppLimit(a)
             
             cplot.plot_MMdot(ax[i], reg['log Mass'], reg[f'{line} log Mdot'], 
@@ -495,90 +502,90 @@ def MdotbyNIRLineDiagnostic(df_lit, df_caspar, fs=14, fit_mass_regions=True,fitn
         
         axside[i].hist(ALL_MDOTS, color=CC[i], orientation='horizontal', bins=20, histtype='stepfilled', edgecolor=CC[i], linewidth=2, alpha=0.5)
 
-        
-        if fit_mass_regions:
-            mass_bounds = [-2.5, -1.1249, 0.5]
-        else:
-            mass_bounds = [-2.5, 0.5]
-        for k in np.arange(len(mass_bounds)-1):
-            ind = np.where((ALL_MASSES > mass_bounds[k]) & (ALL_MASSES <= mass_bounds[k+1]))
-            if len(ind[0]) >0:
-                X2, Y2, X2err, Y2err, upp2 = ALL_MASSES[ind], ALL_MDOTS[ind],ALL_MASSESerr[ind], ALL_MDOTSerr[ind], ALL_UPP[ind]
-                idx = np.isfinite(X2) & np.isfinite(Y2)
-                Xfin, Yfin, Xfinerr, Yfinerr, uppfin = X2[idx], Y2[idx],X2err[idx], Y2err[idx], upp2[idx]
-                df_vals = pd.DataFrame({'log Mass':Xfin, 'log Mass err':Xfinerr, 'log Mdot':Yfin, 'log Mdot err':Yfinerr, 'Upper Limit bool':uppfin})
+        if fit_data:
+            if fit_mass_regions:
+                mass_bounds = [-2.5, -1.1249, 0.5]
+            else:
+                mass_bounds = [-2.5, 0.5]
+            for k in np.arange(len(mass_bounds)-1):
+                ind = np.where((ALL_MASSES > mass_bounds[k]) & (ALL_MASSES <= mass_bounds[k+1]))
+                if len(ind[0]) >0:
+                    X2, Y2, X2err, Y2err, upp2 = ALL_MASSES[ind], ALL_MDOTS[ind],ALL_MASSESerr[ind], ALL_MDOTSerr[ind], ALL_UPP[ind]
+                    idx = np.isfinite(X2) & np.isfinite(Y2)
+                    Xfin, Yfin, Xfinerr, Yfinerr, uppfin = X2[idx], Y2[idx],X2err[idx], Y2err[idx], upp2[idx]
+                    df_vals = pd.DataFrame({'log Mass':Xfin, 'log Mass err':Xfinerr, 'log Mdot':Yfin, 'log Mdot err':Yfinerr, 'Upper Limit bool':uppfin})
 
 
-                result = cfit.linmix_fitting(df_vals, fitname=finfitname, xval='logMass')
-                N, m, slopeerrlow, slopeerrupp, b, intercepterrlow, intercepterrupp, stdfit, r2=result
-                print(diag, mass_bounds[k], result)
-                
-                x = np.linspace(mass_bounds[k], mass_bounds[k+1], 50)
+                    result = cfit.linmix_fitting(df_vals, fitname=finfitname, xval='logMass')
+                    N, m, slopeerrlow, slopeerrupp, b, intercepterrlow, intercepterrupp, stdfit, r2=result
+                    print(diag, mass_bounds[k], result)
 
-                ax[i].plot(x, m*x + b, '-', color='dark'+CC[i], zorder=100, linewidth=3)
-                
-                axres[i].scatter(X2, Y2-(m*X2 + b), s=25, color=CC[i], alpha=0.15)
-                axsideres[i].hist(np.array(Y2-(m*X2 + b)), color=CC[i], orientation='horizontal', bins=20, alpha=0.5, linewidth=2, histtype='stepfilled', edgecolor=CC[i])
-                
-                x_main1 = np.arange(-5.5,0.5,0.1)
-                y_main1 = linfit.at['CASPAR all', 'slope']*x_main1 + linfit.at['CASPAR all', 'intercept']
-                axres[i].plot(x_main1, y_main1-(m*x_main1 + b),color='k', alpha=1, zorder=-3, linewidth=1)
-                axres[i].axhline(0, color='dark'+CC[i], zorder=-1, linewidth=3)
-        plot(ax[i])
-        ax[i].text(0.02, 0.95, letter_label[i]+diag, fontsize=fs+4, ha='left', va='top', transform=ax[i].transAxes)
-    
-        ind = np.where((ALL_MASSES > -1.1249))
-        X2, Y2, X2err, Y2err, upp2 = ALL_MASSES[ind], ALL_MDOTS[ind],ALL_MASSESerr[ind], ALL_MDOTSerr[ind], ALL_UPP[ind]
-        idx = np.isfinite(X2) & np.isfinite(Y2)
-        Xfin, Yfin, Xfinerr, Yfinerr, uppfin = X2[idx], Y2[idx],X2err[idx], Y2err[idx], upp2[idx]
+                    x = np.linspace(mass_bounds[k], mass_bounds[k+1], 50)
 
-        y_main1 = linfit.at['CASPAR all', 'slope']*Xfin + linfit.at['CASPAR all', 'intercept']
-        y_BF = m*Xfin + b
-        
-        r2 = r2_score(Yfin, y_main1)
-        MAE = (1/len(y_main1)) * np.sum(abs(Yfin-y_main1)) # lower = better
-        MSE = (1/len(y_main1)) * np.sum((Yfin-y_main1)**2.) # lower = better
-        MSAE = np.sqrt((1/len(y_main1)) * np.sum((Yfin-y_main1)**2.)) # lower= better
-        rss = np.sum((Yfin-y_main1)**2.)
-        aic = len(y_main1) * np.log10(rss/len(y_main1)) + 2*2 # more negative = better
-        chi2 = (1/(len(y_main1)-2)) * np.nansum((Yfin-y_main1)**2. / Yfinerr)
-        print('stars CASPAR aic:', aic)
-        
-        r2 = r2_score(Yfin, y_BF)
-        MAE = (1/len(y_BF)) * np.sum(abs(Yfin-y_BF)) # lower = better
-        MSE = (1/len(y_BF)) * np.sum((Yfin-y_BF)**2.) # lower = better
-        MSAE = np.sqrt((1/len(y_BF)) * np.sum((Yfin-y_BF)**2.)) # lower= better
-        rss = np.sum((Yfin-y_BF)**2.)
-        aic = len(y_BF) * np.log10(rss/len(y_BF)) + 2*2 # more negative = better
-        chi2 = (1/(len(y_BF)-2)) * np.nansum((Yfin-y_BF)**2. / Yfinerr)
-        print('stars BF aic:', aic)
+                    ax[i].plot(x, m*x + b, '-', color='dark'+CC[i], zorder=100, linewidth=3)
 
-        ##########
-        ind = np.where((ALL_MASSES <= -1.1249))
-        X2, Y2, X2err, Y2err, upp2 = ALL_MASSES[ind], ALL_MDOTS[ind],ALL_MASSESerr[ind], ALL_MDOTSerr[ind], ALL_UPP[ind]
-        idx = np.isfinite(X2) & np.isfinite(Y2)
-        Xfin, Yfin, Xfinerr, Yfinerr, uppfin = X2[idx], Y2[idx],X2err[idx], Y2err[idx], upp2[idx]
+                    axres[i].scatter(X2, Y2-(m*X2 + b), s=25, color=CC[i], alpha=0.15)
+                    axsideres[i].hist(np.array(Y2-(m*X2 + b)), color=CC[i], orientation='horizontal', bins=20, alpha=0.5, linewidth=2, histtype='stepfilled', edgecolor=CC[i])
 
-        y_main1 = linfit.at['CASPAR all', 'slope']*Xfin + linfit.at['CASPAR all', 'intercept']
-        y_BF = m*Xfin + b
-        
-        r2 = r2_score(Yfin, y_main1)
-        MAE = (1/len(y_main1)) * np.sum(abs(Yfin-y_main1)) # lower = better
-        MSE = (1/len(y_main1)) * np.sum((Yfin-y_main1)**2.) # lower = better
-        MSAE = np.sqrt((1/len(y_main1)) * np.sum((Yfin-y_main1)**2.)) # lower= better
-        rss = np.sum((Yfin-y_main1)**2.)
-        aic = len(y_main1) * np.log10(rss/len(y_main1)) + 2*2 # more negative = better
-        chi2 = (1/(len(y_main1)-2)) * np.nansum((Yfin-y_main1)**2. / Yfinerr)
-        print('bds CASPAR aic:', aic)
-        
-        r2 = r2_score(Yfin, y_BF)
-        MAE = (1/len(y_BF)) * np.sum(abs(Yfin-y_BF)) # lower = better
-        MSE = (1/len(y_BF)) * np.sum((Yfin-y_BF)**2.) # lower = better
-        MSAE = np.sqrt((1/len(y_BF)) * np.sum((Yfin-y_BF)**2.)) # lower= better
-        rss = np.sum((Yfin-y_BF)**2.)
-        aic = len(y_BF) * np.log10(rss/len(y_BF)) + 2*2 # more negative = better
-        chi2 = (1/(len(y_BF)-2)) * np.nansum((Yfin-y_BF)**2. / Yfinerr)
-        print('bds BF aic:', aic)
+                    x_main1 = np.arange(-5.5,0.5,0.1)
+                    y_main1 = linfit.at['CASPAR all', 'slope']*x_main1 + linfit.at['CASPAR all', 'intercept']
+                    axres[i].plot(x_main1, y_main1-(m*x_main1 + b),color='k', alpha=1, zorder=-3, linewidth=1)
+                    axres[i].axhline(0, color='dark'+CC[i], zorder=-1, linewidth=3)
+            plot(ax[i])
+            ax[i].text(0.02, 0.95, letter_label[i]+diag, fontsize=fs+4, ha='left', va='top', transform=ax[i].transAxes)
+
+            ind = np.where((ALL_MASSES > -1.1249))
+            X2, Y2, X2err, Y2err, upp2 = ALL_MASSES[ind], ALL_MDOTS[ind],ALL_MASSESerr[ind], ALL_MDOTSerr[ind], ALL_UPP[ind]
+            idx = np.isfinite(X2) & np.isfinite(Y2)
+            Xfin, Yfin, Xfinerr, Yfinerr, uppfin = X2[idx], Y2[idx],X2err[idx], Y2err[idx], upp2[idx]
+
+            y_main1 = linfit.at['CASPAR all', 'slope']*Xfin + linfit.at['CASPAR all', 'intercept']
+            y_BF = m*Xfin + b
+
+            r2 = r2_score(Yfin, y_main1)
+            MAE = (1/len(y_main1)) * np.sum(abs(Yfin-y_main1)) # lower = better
+            MSE = (1/len(y_main1)) * np.sum((Yfin-y_main1)**2.) # lower = better
+            MSAE = np.sqrt((1/len(y_main1)) * np.sum((Yfin-y_main1)**2.)) # lower= better
+            rss = np.sum((Yfin-y_main1)**2.)
+            aic = len(y_main1) * np.log10(rss/len(y_main1)) + 2*2 # more negative = better
+            chi2 = (1/(len(y_main1)-2)) * np.nansum((Yfin-y_main1)**2. / Yfinerr)
+            print('stars CASPAR aic:', aic)
+
+            r2 = r2_score(Yfin, y_BF)
+            MAE = (1/len(y_BF)) * np.sum(abs(Yfin-y_BF)) # lower = better
+            MSE = (1/len(y_BF)) * np.sum((Yfin-y_BF)**2.) # lower = better
+            MSAE = np.sqrt((1/len(y_BF)) * np.sum((Yfin-y_BF)**2.)) # lower= better
+            rss = np.sum((Yfin-y_BF)**2.)
+            aic = len(y_BF) * np.log10(rss/len(y_BF)) + 2*2 # more negative = better
+            chi2 = (1/(len(y_BF)-2)) * np.nansum((Yfin-y_BF)**2. / Yfinerr)
+            print('stars BF aic:', aic)
+
+            ##########
+            ind = np.where((ALL_MASSES <= -1.1249))
+            X2, Y2, X2err, Y2err, upp2 = ALL_MASSES[ind], ALL_MDOTS[ind],ALL_MASSESerr[ind], ALL_MDOTSerr[ind], ALL_UPP[ind]
+            idx = np.isfinite(X2) & np.isfinite(Y2)
+            Xfin, Yfin, Xfinerr, Yfinerr, uppfin = X2[idx], Y2[idx],X2err[idx], Y2err[idx], upp2[idx]
+
+            y_main1 = linfit.at['CASPAR all', 'slope']*Xfin + linfit.at['CASPAR all', 'intercept']
+            y_BF = m*Xfin + b
+
+            r2 = r2_score(Yfin, y_main1)
+            MAE = (1/len(y_main1)) * np.sum(abs(Yfin-y_main1)) # lower = better
+            MSE = (1/len(y_main1)) * np.sum((Yfin-y_main1)**2.) # lower = better
+            MSAE = np.sqrt((1/len(y_main1)) * np.sum((Yfin-y_main1)**2.)) # lower= better
+            rss = np.sum((Yfin-y_main1)**2.)
+            aic = len(y_main1) * np.log10(rss/len(y_main1)) + 2*2 # more negative = better
+            chi2 = (1/(len(y_main1)-2)) * np.nansum((Yfin-y_main1)**2. / Yfinerr)
+            print('bds CASPAR aic:', aic)
+
+            r2 = r2_score(Yfin, y_BF)
+            MAE = (1/len(y_BF)) * np.sum(abs(Yfin-y_BF)) # lower = better
+            MSE = (1/len(y_BF)) * np.sum((Yfin-y_BF)**2.) # lower = better
+            MSAE = np.sqrt((1/len(y_BF)) * np.sum((Yfin-y_BF)**2.)) # lower= better
+            rss = np.sum((Yfin-y_BF)**2.)
+            aic = len(y_BF) * np.log10(rss/len(y_BF)) + 2*2 # more negative = better
+            chi2 = (1/(len(y_BF)-2)) * np.nansum((Yfin-y_BF)**2. / Yfinerr)
+            print('bds BF aic:', aic)
 
 
     
@@ -657,20 +664,20 @@ def MdotbyNIRLineDiagnostic(df_lit, df_caspar, fs=14, fit_mass_regions=True,fitn
     plt.show()
     
     
-def Ha10_UVexcess_combo(df_lit, df_caspar, **kwargs):
+def Ha10_UVexcess_combo(df_caspar, **kwargs):
     fig, (ax2, ax1) = plt.subplots(figsize=(5,8), ncols=1, nrows=2)
-    bd_all = csort.CASPAR_allValues(df_lit, df_caspar)
+    
     
     # HA 10 vs HA
-    IND = (~bd_all['Ha 10% Accretion Rate'].isna()) & (~bd_all['Ha Accretion Rate'].isna())
+    IND = (~df_caspar['Ha 10% Accretion Rate'].isna()) & (~df_caspar['Ha Accretion Rate'].isna())
 
-    Ha10 = bd_all['Ha 10% Accretion Rate'][IND].values
-    Ha = bd_all['Ha Accretion Rate'][IND].values
-    Haerr = bd_all['Ha Accretion Rate err'][IND].values
-    d = bd_all['Distance'][IND].values
-    M = bd_all['Mass'][IND].values
-    age = bd_all['Age'][IND].values
-    COM = bd_all['Companion'][IND].values
+    Ha10 = df_caspar['Ha 10% Accretion Rate'][IND].values
+    Ha = df_caspar['Ha Accretion Rate'][IND].values
+    Haerr = df_caspar['Ha Accretion Rate err'][IND].values
+    d = df_caspar['Distance'][IND].values
+    M = df_caspar['Mass'][IND].values
+    age = df_caspar['Age'][IND].values
+    COM = df_caspar['Companion'][IND].values
     yerr = 0.434 * Ha/Haerr
    
     for i in np.arange(len(Ha10)):
@@ -693,17 +700,17 @@ def Ha10_UVexcess_combo(df_lit, df_caspar, **kwargs):
                             xlim=(-2.5, 0.3), ylim=(-2.5, 2.5))
     
     ### UV excess 
-    IND = (~bd_all['Ha Accretion Rate'].isna()) & (bd_all['Accretion Diagnostic']=='Continuum Excess')
+    IND = (~df_caspar['Ha Accretion Rate'].isna()) & (df_caspar['Accretion Diagnostic']=='Continuum Excess')
 
-    Ha = bd_all['Ha Accretion Rate'][IND].values
-    UV = bd_all['Accretion Rate'][IND].values
-    UVerr = bd_all['Accretion Rate err'][IND].values
+    Ha = df_caspar['Ha Accretion Rate'][IND].values
+    UV = df_caspar['Accretion Rate'][IND].values
+    UVerr = df_caspar['Accretion Rate err'][IND].values
     UVlogerr = 0.434 * UV/UVerr
     
-    d = bd_all['Distance'][IND].values
-    M = bd_all['Mass'][IND].values
-    age = bd_all['Age'][IND].values
-    COM = bd_all['Companion'][IND].values
+    d = df_caspar['Distance'][IND].values
+    M = df_caspar['Mass'][IND].values
+    age = df_caspar['Age'][IND].values
+    COM = df_caspar['Companion'][IND].values
     
     for i in np.arange(len(Ha10)):
         

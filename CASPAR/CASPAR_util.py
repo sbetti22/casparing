@@ -24,6 +24,14 @@ def AccDiagColor():
     color = {'Line Luminosity':magenta, 'Hα Photometric Luminosity':darkmagenta, 'Line Profile':forestgreen, 'Continuum Excess':lightblue}
     return color
 
+def ObjectColor():
+    cS, cBD, cP = 'dimgray', 'cyan', 'magenta'
+    cUPPS, cUPPBD, cUPPP = 'dimgray', 'cyan', 'magenta'
+    cSdark, cBDdark, cPdark = 'k', 'darkcyan', 'darkmagenta'
+    alpha=1
+    edgecolor='k'
+    return cS, cBD, cP, cUPPS, cUPPBD, cUPPP, cSdark, cBDdark, cPdark, alpha, edgecolor
+
 def AccDiagColorDark():
     darkmagenta = '#7a3d47' #'#CC6677'
     superdarkmagenta = '#541535' #'#882255'

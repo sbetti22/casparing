@@ -8,7 +8,7 @@ color = AccDiagColor()
 import seaborn as sns
 
 
-def corner_map(df_lit, df_caspar, fs=20):
+def corner_map(df_caspar, fs=20):
     ###############
     name = ['Main Association', 'Sp Type Num', 'Age', 'log Mass', 'log Lum',  'Log Accretion Luminosity', 'log Mdot',  'AD']
     data = df_caspar[name]
@@ -25,7 +25,7 @@ def corner_map(df_lit, df_caspar, fs=20):
                       hue_order=AD, height=3)
 
     def plot_extra(x, y, **kwargs):
-        sns.scatterplot(x=df_lit[x.name], y=df_lit[y.name], color='gray', zorder=-1, alpha=0.3, marker='x')
+        sns.scatterplot(x=df_caspar[x.name], y=df_caspar[y.name], color='gray', zorder=-1, alpha=0.3, marker='x')
     pp.map_offdiag(plot_extra)
 
 

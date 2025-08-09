@@ -2,18 +2,27 @@ import os
 import pandas as pd
 import numpy as np
 from astropy import units as u
+import gdown
 
 import CASPAR_util as cutil
 color = cutil.AccDiagColor()
 
 def CASPAR_loaddata(lit_database=None, caspar=None):
     if caspar is None:
-        df_caspar = pd.read_csv('Comprehensive Archive of subStellar and Planetary Accretion Rates (CASPAR) Betti+2023 - CASPAR.csv',skiprows=[1])
+        url = 'https://drive.google.com/uc?id=1QbJHcrndhaP2JIrBazy4zcUULpgClCdt76nMilKfRNs'
+        output = "caspar.xlsx"
+
+        df_caspar = pd.read_excel('caspar.xlsx', sheet_name='CASPAR', skiprows=[1])
+
     else:
         df_caspar = pd.read_csv(caspar, skiprows=[1])
         
     if lit_database is None:
-        df_lit = pd.read_csv('Comprehensive Archive of subStellar and Planetary Accretion Rates (CASPAR) Betti+2023 - Literature Database.csv',skiprows=[1])
+        url = 'https://drive.google.com/uc?id=1QbJHcrndhaP2JIrBazy4zcUULpgClCdt76nMilKfRNs'
+        output = "caspar.xlsx"
+        
+        df_lit = pd.read_excel('caspar.xlsx', sheet_name='Literature Database', skiprows=[1])
+
     else:
         df_lit = pd.read_csv(lit_database, skiprows=[1])
     
@@ -76,7 +85,10 @@ def CASPAR_loaddata(lit_database=None, caspar=None):
 
     df_caspar['Upper Limit bool'] = df_caspar['Upper Limit'] != 'UPP' # true is detected, false is upper limit
     df_lit['Upper Limit bool'] = df_lit['Upper Limit'] != 'UPP' # true is detected, false is upper limit
-
+    
+    planets = df_lit.loc[(df_lit['Companion']=='COM') & (df_lit['Mass']<=0.075)]
+    df_caspar.loc[planets.index, :] = planets[:]
+    
     return df_lit, df_caspar
 
     
@@ -168,11 +180,11 @@ def AccDiag_AssD(df):
     return AD, Ass_d, Ass_name, COL
 
     
-def CASPAR_separateByMass(df_lit, df_caspar):
+def CASPAR_separateByMass(df_caspar):
     
     stars = df_caspar.loc[(df_caspar['Mass'] > 0.075) & (df_caspar['Companion'] != 'COM')]
     bds = df_caspar.loc[(df_caspar['Mass'] <= 0.075) & (df_caspar['Companion'] != 'COM')]
-    planets = df_lit.loc[(df_lit['Companion']=='COM') & (df_lit['Mass']<=0.075)]
+    planets = df_caspar.loc[(df_caspar['Companion']=='COM') & (df_caspar['Mass']<=0.075)]
 
     Supp = stars.loc[stars['Upper Limit'] == 'UPP']
     Sreg = stars.loc[stars['Upper Limit'] != 'UPP']
@@ -193,21 +205,8 @@ def CASPAR_separateByUppLimit(df):
    
     return REG, UPP
 
-def CASPAR_allValues(df_lit, df_caspar):
 
-    ALL_MASSES = np.array([])
-    ALL_MDOTS = np.array([])
-
-    df_caspar2 = df_caspar.loc[df_caspar['Companion']!='COM']
-    df_caspar3 = df_caspar.loc[(df_caspar['Companion']=='COM') & (df_caspar['Mass']>0.075)]
-    df_lit2 = df_lit.loc[(df_lit['Companion']=='COM')&(df_lit['Mass']<=0.075)]
-    df_all = [df_caspar2,df_caspar3, df_lit2]
-    result = pd.concat(df_all, ignore_index=True)
-    return result
-
-def CASPAR_separateByAge(df_lit, df_caspar, agelow, ageupp):
-    df_ageupdate = df_caspar.loc[(df_caspar['Age']>agelow) &
+def CASPAR_separateByAge(df_caspar, agelow, ageupp):
+    df_age = df_caspar.loc[(df_caspar['Age']>agelow) &
                (df_caspar['Age']<= ageupp)]
-    df_ageorig = df_lit.loc[(df_lit['Age']>agelow) &
-                           (df_lit['Age']<=ageupp)]
-    return df_ageorig, df_ageupdate
+    return df_age

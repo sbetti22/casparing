@@ -4,8 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.colors as COLORS
 
-#from CASPAR_sortdata import CASPAR_loaddata
-#df_lit, df_caspar = CASPAR_loaddata()
+
 
 def plot_cluster(dist=False):
     cluster = ['25 Orionis','118 Tau', 'Argus','B Pictoris', 'Chamaeleon I','Corona-Australis', 'IC 348', 'Lagoon Nebula', 
@@ -27,6 +26,16 @@ def plot_age():
     c = ['#FFB000', '#FE6100', '#DC267F', '#785EF0', '#648FFF', 'gray']
     darkc = ['#CC8D00', '#CC4E00', '#AA2761', '#5C48B7', '#336CFF', 'k']
     return age, marker, c, darkc
+
+def plot_objtype_legend(ax, cS, cBD, cP, fs=12,loc='upper right'):
+    s1= ax.scatter([],[], color=cS, marker='o')
+    s2= ax.scatter([],[], color=cBD,  marker='D')
+    s3= ax.scatter([],[], color=cP,  marker='s')
+    leg = ax.legend([s1, s2, s3], ['Star', 'Brown Dwarf', 'Planetary Mass\nCompanion'], 
+    ncol=1, fontsize=fs/2, loc=loc,title_fontsize=fs/2, markerscale=0.5, 
+    labelcolor=[cS, cBD, cP], frameon=True, columnspacing=0.3,
+    handletextpad=0.1) 
+    leg.set_zorder(1000)
       
 def plot_createSinglePlot(figsize=(4,3)):
     fig = plt.figure(figsize=figsize, dpi=300)
@@ -95,7 +104,7 @@ def plot_MMdot(ax, XXreg, YYreg, XXupp, YYupp, color_cmap=False, **kwargs):
     if 'edgecolor' in kwargs:
         edgecolor = kwargs['edgecolor']
     else:
-        edgecolor='none'
+        edgecolor=None
 
     if 'linewidth' in kwargs:
         linewidth=kwargs['linewidth']
@@ -148,11 +157,11 @@ def plot_MMdot(ax, XXreg, YYreg, XXupp, YYupp, color_cmap=False, **kwargs):
     return pp
         
     
-def plot_graylines(ax, df_lit, df_caspar):
-    df_litCOM = df_lit.loc[(df_lit['Mass']<=0.075) & (df_lit['Companion']=='COM')]
-    NAMES = df_litCOM['Unique Name'].unique()
+def plot_graylines(ax, df_caspar):
+    df_casparCOM = df_caspar.loc[(df_caspar['Mass']<=0.075) & (df_caspar['Companion']=='COM')]
+    NAMES = df_casparCOM['Unique Name'].unique()
     for name in NAMES:
-        dfname = df_litCOM.loc[df_litCOM['Unique Name']==name]
+        dfname = df_casparCOM.loc[df_casparCOM['Unique Name']==name]
         XX = dfname['log Mass'].values
         XX = np.append(XX, XX[0])
         YY = dfname['log Mdot'].values

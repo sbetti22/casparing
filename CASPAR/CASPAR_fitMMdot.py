@@ -18,6 +18,7 @@ linfit = pd.read_csv(fil, delimiter=',', comment='#', skiprows=[0])
 linfit = linfit.set_index('obj')
 linfit = linfit.replace(-1000, np.nan)
 
+
 ## MCMC
 def log_likelihood(params, x, obs):
     """ Calculate log likelihood assuming iid Gaussian errors.
@@ -241,9 +242,6 @@ def linmix_fitting(df2, fitname='doLinearFit', xval='logMass', plot=False, ax=No
             x = df['log Mass'].values
             df.loc[df['log Mass err']==0, 'log Mass err'] = 0.2
             xsig = df['log Mass err'].values
-        plt.figure()
-        plt.errorbar(x,y,xerr=xsig, yerr=ysig,fmt='o')
-        plt.show()
 
         lmcens  = linmix.LinMix(x, y, xsig, ysig, delta=upper_limit_boolarray, K=2, seed=8)
         lmcens.run_mcmc(silent=False)
