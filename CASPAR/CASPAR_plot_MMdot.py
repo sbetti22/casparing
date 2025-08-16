@@ -1,14 +1,3 @@
-#
-#from CASPAR_imports import *
-#from CASPAR_fittingcodes import *
-#from CASPAR_randomcode import *
-#from scipy import interpolate
-
-#from CASPAR_linearfitsLinMix import read_linfitsLINMAX
-#linfit = read_linfitsLINMAX()
-
-#from CASPAR_pandas import CASPAR_loaddata
-#df_lit, df_caspar = CASPAR_loaddata()
 import CASPAR_plotting as cplot
 import CASPAR_util as cutil
 import CASPAR_sortdata as csort

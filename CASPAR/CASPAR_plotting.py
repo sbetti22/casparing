@@ -27,13 +27,17 @@ def plot_age():
     darkc = ['#CC8D00', '#CC4E00', '#AA2761', '#5C48B7', '#336CFF', 'k']
     return age, marker, c, darkc
 
-def plot_objtype_legend(ax, cS, cBD, cP, fs=12,loc='upper right'):
+def plot_objtype_legend(ax, cS, cBD, cP, fs=12,loc='upper right', labels_color=True):
     s1= ax.scatter([],[], color=cS, marker='o')
     s2= ax.scatter([],[], color=cBD,  marker='D')
     s3= ax.scatter([],[], color=cP,  marker='s')
+    if labels_color:
+        labelcolor=[cS, cBD, cP]
+    else:
+        labelcolor='k'
     leg = ax.legend([s1, s2, s3], ['Star', 'Brown Dwarf', 'Planetary Mass\nCompanion'], 
     ncol=1, fontsize=fs/2, loc=loc,title_fontsize=fs/2, markerscale=0.5, 
-    labelcolor=[cS, cBD, cP], frameon=True, columnspacing=0.3,
+    labelcolor=labelcolor, frameon=True, columnspacing=0.3,
     handletextpad=0.1) 
     leg.set_zorder(1000)
       
