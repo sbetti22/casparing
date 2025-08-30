@@ -51,7 +51,10 @@ def accretion_properties(df, unc=True):
 
 
 def put_in_caspar_order(df):
-    cc = pd.read_csv('../data/accretion_data/caspar_columns.txt', header=None)
+    HERE = os.path.dirname(os.path.abspath(__file__))
+    fil = os.path.join(HERE, '../data/accretion_data/caspar_columns.txt')
+
+    cc = pd.read_csv(fil, header=None)
     caspar_cols = cc[0].values
     finaldf = pd.DataFrame(columns=caspar_cols)
     for column in list(df.columns):

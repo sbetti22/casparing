@@ -12,8 +12,11 @@ from astropy import units as u
 from uncertainties.umath import *
 from isochrones.interp import DFInterpolator
 
-baraffe_df = pd.read_csv('../data/parameters_data/models/Baraffe_models.csv', index_col=[0,1])
-mesa_df = pd.read_csv('../data/parameters_data/models/mist_models.csv', index_col=[0,1])
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+baraffe_df = pd.read_csv(os.path.join(HERE, '../data/parameters_data/models/Baraffe_models.csv'), index_col=[0,1])
+
+mesa_df = pd.read_csv(os.path.join(HERE, '../data/parameters_data/models/mist_models.csv'), index_col=[0,1])
 
 
 class interpIsochrones:
@@ -415,12 +418,12 @@ class physical_params:
                 SPN = self.to_SpTyNum()
         
         if (SPN < 45) | (SPN >= 80): 
-            P = pd.read_csv('../data/parameters_data/sptype_temp_conversion/Pecaut_SpTyTeff_Numericized.txt', delimiter='\t', comment='#')
+            P = pd.read_csv(os.path.join(HERE,'../data/parameters_data/sptype_temp_conversion/Pecaut_SpTyTeff_Numericized.txt'), delimiter='\t', comment='#')
             SpTyNum = P['SpTyIdentifier']
             Teff= P['Teff_K']
             who_won = 'Pecaut'
         else:
-            HH = pd.read_csv('../data/parameters_data/sptype_temp_conversion/HerczegHillenbrand_SpTyTeff_Numericized.txt', delimiter='\t')
+            HH = pd.read_csv(os.path.join(HERE,'../data/parameters_data/sptype_temp_conversion/HerczegHillenbrand_SpTyTeff_Numericized.txt'), delimiter='\t')
             SpTyNum = HH['SpTyIdentifier']+20
             Teff= HH['Teff_K']
             who_won = "Herczeg & Hillenbrand 2014"
@@ -450,12 +453,12 @@ class physical_params:
             temp = self.Teff
         
         if (temp.value > 6600) | (temp.value < 2500): 
-            P = pd.read_csv('../data/parameters_data/sptype_temp_conversion/Pecaut_SpTyTeff_Numericized.txt', delimiter='\t', comment='#')
+            P = pd.read_csv(os.path.join(HERE,'../data/parameters_data/sptype_temp_conversion/Pecaut_SpTyTeff_Numericized.txt'), delimiter='\t', comment='#')
             SpTyNum = P['SpTyIdentifier'].to_list()
             Teff= P['Teff_K'].to_list()
             who_won = 'Pecaut'
         else:
-            HH = pd.read_csv('../data/parameters_data/sptype_temp_conversion/HerczegHillenbrand_SpTyTeff_Numericized.txt', delimiter='\t')
+            HH = pd.read_csv(os.path.join(HERE,'../data/parameters_data/sptype_temp_conversion/HerczegHillenbrand_SpTyTeff_Numericized.txt'), delimiter='\t')
             SpTyNum = (HH['SpTyIdentifier']+20).to_list()
             Teff= HH['Teff_K'].to_list()
             who_won = "Herczeg & Hillenbrand 2014"

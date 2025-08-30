@@ -109,7 +109,10 @@ class rederive_Mdot:
         if isinstance(flux, float):
             flux = flux * u.erg/u.s/u.cm**2.
         
-        alcala_lines = pd.read_csv('../data/accretion_data/alcala2017_linear_fits.csv', comment='#')
+        HERE = os.path.dirname(os.path.abspath(__file__))
+        fil = os.path.join(HERE, '../data/accretion_data/alcala2017_linear_fits.csv')
+
+        alcala_lines = pd.read_csv(fil, comment='#')
 
         if line is None:
             a = A

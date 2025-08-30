@@ -374,7 +374,10 @@ def run_banyan(df):
 
 
 def get_ages(tab, verbose=False):
-    ages = pd.read_csv('../data/parameters_data/Association Ages and Distances.csv')
+    HERE = os.path.dirname(os.path.abspath(__file__))
+    fil = os.path.join(HERE, '../data/parameters_data/Association Ages and Distances.csv')
+    
+    ages = pd.read_csv(fil)
     df2 = {'Association': ['FIELD'], 'Age (Myr)': [np.nan], 'Age err (Myr)': [np.nan]}
     df2 = pd.DataFrame(df2)
     ages = pd.concat([ages,df2], ignore_index = True)
