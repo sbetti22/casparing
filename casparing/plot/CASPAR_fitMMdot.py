@@ -1,4 +1,3 @@
-### fitting codes
 from scipy import optimize
 import emcee, corner
 from scipy.optimize import curve_fit

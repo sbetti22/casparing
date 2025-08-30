@@ -2,10 +2,11 @@ import seaborn as sns
 import numpy as np
 from scipy.stats import norm
 import matplotlib.pyplot as plt
-import .CASPAR_plotting as cplot
-import .CASPAR_util as cutil
-import .CASPAR_sortdata as csort
-import .CASPAR_fitMMdot as cfit
+
+import casparing.plot.CASPAR_plotting as cplot
+import casparing.plot.CASPAR_util as cutil
+import casparing.plot.CASPAR_sortdata as csort
+import casparing.plot.CASPAR_fitMMdot as cfit
 
 def _plot_refVSnew(ax, df_x, df_y, colname, AD, label, legend=False, **kwargs):
         axlims= kwargs.get('axlims', None)

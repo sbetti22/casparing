@@ -1,10 +1,10 @@
 import os
+import gdown
 import pandas as pd
 import numpy as np
 from astropy import units as u
-import gdown
 
-import .CASPAR_util as cutil
+import casparing.plot.CASPAR_util as cutil
 color = cutil.AccDiagColor()
 
 def CASPAR_loaddata(lit_database=None, caspar=None):

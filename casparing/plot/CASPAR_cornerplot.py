@@ -2,11 +2,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-
-from .CASPAR_util import AccDiagColor
-color = AccDiagColor()
 import seaborn as sns
 
+from casparing.plot.CASPAR_util import AccDiagColor
+color = AccDiagColor()
 
 def corner_map(df_caspar, fs=20):
     ###############

@@ -6,13 +6,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-import .CASPAR_util as cutil
-import .CASPAR_sortdata as csort
-import .CASPAR_plotting as cplot
-import .CASPAR_fitMMdot as cfit
-# get dictionary of accretion diagnosticas
-accdiaglines = cutil.AccDiagLines()
+import casparing.plot.CASPAR_util as cutil
+import casparing.plot.CASPAR_sortdata as csort
+import casparing.plot.CASPAR_plotting as cplot
+import casparing.plot.CASPAR_fitMMdot as cfit
 
+accdiaglines = cutil.AccDiagLines()
 colors = cutil.AccDiagColor()
 darkcolors = cutil.AccDiagColorDark()
 linfit = cutil.linfitMMdot()

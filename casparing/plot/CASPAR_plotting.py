@@ -4,8 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.colors as COLORS
 
-
-
 def plot_cluster(dist=False):
     cluster = ['25 Orionis','118 Tau', 'Argus','B Pictoris', 'Chamaeleon I','Corona-Australis', 'IC 348', 'Lagoon Nebula', 
                'Lupus', 'NGC 2024','n Chamaeleontis','p Oph','Sh 2-284', 'Taurus', 'Tucana-Horologium','TW Hya',

@@ -1,9 +1,10 @@
-import .CASPAR_plotting as cplot
-import .CASPAR_fitMMdot as cfitmmdot
-import .CASPAR_sortdata as csort
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import numpy as np
+
+import casparing.plot.CASPAR_plotting as cplot
+import casparing.plot.CASPAR_fitMMdot as cfitmmdot
+import casparing.plot.CASPAR_sortdata as csort
 
 def MdotVSmassVSsfr(df_caspar, lit_lines=True, **kwargs):
     fs = kwargs.get('fs', 8)

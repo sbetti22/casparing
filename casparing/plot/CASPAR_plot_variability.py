@@ -4,8 +4,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import .CASPAR_util as cutil
-import .CASPAR_plotting as cplot
+
+import casparing.plot.CASPAR_util as cutil
+import casparing.plot.CASPAR_plotting as cplot
 
 
 def plot_allvariability(df_caspar, **kwargs):

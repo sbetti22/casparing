@@ -1,14 +1,14 @@
-import .CASPAR_plotting as cplot
-import .CASPAR_util as cutil
-import .CASPAR_sortdata as csort
-import .CASPAR_fitMMdot as cfit
-
 import os
 import numpy as np
 import pandas as pd
 import matplotlib.colors as mc
 import matplotlib.pyplot as plt
 from scipy import interpolate
+
+import casparing.plot.CASPAR_plotting as cplot
+import casparing.plot.CASPAR_util as cutil
+import casparing.plot.CASPAR_sortdata as csort
+import casparing.plot.CASPAR_fitMMdot as cfit
 
 def _colorbySFR_cbar(fig, ax, plot, vmin, vmax,cmap, fs):
     cbaxes = fig.add_axes([0.98, 0.19, 0.03, 0.76])

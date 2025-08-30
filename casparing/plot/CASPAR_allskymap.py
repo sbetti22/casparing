@@ -1,17 +1,19 @@
+import numpy as np
+
 from matplotlib import patheffects
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-import numpy as np
+
 from astropy import units as u
 from astropy.io import fits
 from astropy.wcs import WCS
 from astropy.coordinates import SkyCoord
 from astropy.visualization.wcsaxes.frame import EllipticalFrame
 
-import .CASPAR_plotting as cplot
 import warnings
 warnings.filterwarnings("ignore")
 
+import casparing.plot.CASPAR_plotting as cplot
 
 def insets(ax, a, wcs, ax_pos, bounds, manual_set=False):
     axins = ax.inset_axes(ax_pos)
