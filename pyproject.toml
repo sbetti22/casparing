@@ -1,0 +1,85 @@
+from setuptools import setup, find_packages
+
+setup(name="casparing", 
+        version = "1.0",
+        description='caspar rederivation and plotting tool kit',
+        author = "Sarah Betti",
+        author_email = "sbetti@stsci.edu",
+        license='MIT',
+        url = "https://github.com/sbetti22/casparing",
+        classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Science/Research ',
+        'Topic :: Scientific/Engineering :: Astronomy',
+        'Programming Language :: Python :: 3',
+        'License :: OSI Approved :: MIT License'
+        ],
+        keywords='accretion',
+        packages = ['casparing'],
+        install_requires=[
+        'numpy', 'pandas', 'astropy', 'matplotlib', 'astroquery', 'tqdm', 'pandarallel', 'scipy', 'uncertainties', 'extinction', 'isochrones', 'banyansigma', 
+        ], 
+        package_data={'casparing/data': ['*']},
+        zip_safe=False
+        
+        )
+
+
+[build-system]
+requires = ["setuptools", "setuptools-scm", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "casparing"
+authors = [{name = "Sarah Betti", email = "sbetti@stsci.edu"}]
+description = "caspar rederivation and plotting tool kit"
+readme = "README.rst"
+requires-python = ">=3.10,<3.14"
+license = "MIT"
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Astronomy",
+]
+dependencies = [
+    'numpy', 
+    'pandas', 
+    'astropy', 
+    'matplotlib', 
+    'astroquery', 
+    'tqdm', 
+    'pandarallel', 
+    'scipy', 
+    'uncertainties', 
+    'extinction', 
+    'isochrones', 
+    'banyan_sigma'
+    ]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+test = [
+    "black",
+    "flake8",
+    "pycodestyle",
+    "pylint",
+    "pytest",
+    "pytest-cov",
+]
+
+[project.urls]
+Repository = "https://github.com/sbetti22/casparing"
+Issues = "https://github.com/sbetti22/casparing/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["casparing*"]
+
+[tool.setuptools_scm]
+write_to = "casparing/_version.py"
+
+[tool.setuptools.package-data]
+"casparing.data" = ["*/*"]
