@@ -9,16 +9,16 @@ from .derive import CASPAR_astrometry
 from .derive import CASPAR_rederiveaccretion
 from .derive import CASPAR_rederiveparameters
 
-from .plot import CASPAR_plot_MdotAge.py 
-from .plot import CASPAR_plot_variability.py
-from .plot import CASPAR_allskymap.py      
-from .plot import CASPAR_plot_MMdot.py   
-from .plot import CASPAR_plotting.py
-from .plot import CASPAR_cornerplot.py 
-from .plot import CASPAR_plot_MMdotbyDiagnostic.py  
-from .plot import CASPAR_sortdata.py
+from .plot import CASPAR_plot_MdotAge 
+from .plot import CASPAR_plot_variability
+from .plot import CASPAR_allskymap      
+from .plot import CASPAR_plot_MMdot   
+from .plot import CASPAR_plotting
+from .plot import CASPAR_cornerplot 
+from .plot import CASPAR_plot_MMdotbyDiagnostic  
+from .plot import CASPAR_sortdata
     
-from .plot import CASPAR_plot_MMdotbySFR.py  
-from .plot import CASPAR_util.py
-from .plot import CASPAR_Haprofile.py 
-from .plot import CASPAR_plot_physicalParamComparison.py
+from .plot import CASPAR_plot_MMdotbySFR  
+from .plot import CASPAR_util
+from .plot import CASPAR_Haprofile 
+from .plot import CASPAR_plot_physicalParamComparison
