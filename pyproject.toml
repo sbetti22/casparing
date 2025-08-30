@@ -29,7 +29,13 @@ dependencies = [
     'uncertainties', 
     'extinction', 
     'isochrones', 
-    'banyan_sigma'
+    'gdown',
+    'seaborn',
+    'sklearn',
+    'statsmodels',
+    'emcee',
+    'corner',
+    'gdown'
     ]
 dynamic = ["version"]
 
