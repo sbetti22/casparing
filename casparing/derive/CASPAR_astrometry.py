@@ -20,7 +20,7 @@ logger.setLevel(logging.WARNING)
 import warnings
 warnings.filterwarnings('ignore')
 
-from .banyansigma_core import membership_probability
+from casparing.derive.banyansigma_core import membership_probability
 
 def query_simbad(obj, verbose=False):
     '''

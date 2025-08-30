@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from astropy import units as u
-import .rederiveparameters as cpm
+import casparing.derive.rederiveparameters as cpm
 
 from pandarallel import pandarallel
 pandarallel.initialize(progress_bar=True)
