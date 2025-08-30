@@ -1,0 +1,460 @@
+Unique ID
+Unique Name
+Simbad-Resolvable Name
+Reference Name
+Duplicate #
+Total Duplicates
+Binary
+Companion
+Separation
+Object
+RA (J2000.0)
+Dec (J2000.0)
+RA (J2016.0)
+Dec (J2016.0)
+Disk Type
+Association Census
+Association Probability Banyan Sigma
+Association Census Reference
+Association Age
+Association Age err
+Individual Age
+Individual Age err
+Individual Age Reference
+GAIA DR2 Source ID
+GAIA DR2 Parallax
+GAIA DR2 Parallax err
+GAIA DR2 Reliable Parallax
+GAIA DR2 Distance
+GAIA DR2 Distance lower limit
+GAIA DR2 Distance upper limit
+GAIA DR2 RA proper motion
+GAIA DR2 RA proper motion err
+GAIA DR2 Dec proper motion
+GAIA DR2 Dec proper motion err
+GAIA EDR3 Source ID
+GAIA EDR3 Parallax
+GAIA EDR3 Parallax err
+GAIA EDR3 Reliable Parallax
+GAIA EDR3 Geometric Distance
+GAIA EDR3 Geometric Distance lower limit
+GAIA EDR3 Geometric Distance upper limit
+GAIA EDR3 RA proper motion
+GAIA EDR3 RA proper motion err
+GAIA EDR3 Dec proper motion
+GAIA EDR3 Dec proper motion err
+radial velocity
+radial velocity err
+A_V
+A_V err
+A_J
+A_J err
+A_V reference
+Jmag
+Jmag err
+Hmag
+Hmag err
+Kmag
+Kmag err
+Ha mag
+Ha mag err
+Original Reference
+Reference
+Telescope/Instrument
+Association
+Age
+Age err
+Epoch
+log g
+Distance
+Distance err lower limit
+Distance err upper limit
+Sp Type
+Sp Type err
+Teff
+Teff err
+Mass
+Mass err
+Luminosity
+Luminosity Err
+Radius
+Radius err
+Accretion Diagnostic
+Tracer
+Ha 10% Upper Limit
+Ha 10%
+Ha 10% err
+Ha 10% Accretion Rate
+Ha Upper Limit
+Ha EW
+Ha EW err
+Ha Line Flux
+Ha Line Flux err
+Ha Log Accretion Luminosity
+Ha Log Accretion Luminosity err
+Ha Accretion Rate
+Ha Accretion Rate err
+Hb Upper Limit
+Hb EW
+Hb EW err
+Hb Line Flux
+Hb Line Flux err
+Hb Log Accretion Luminosity
+Hb Log Accretion Luminosity err
+Hb Accretion Rate
+Hb Accretion Rate err
+Hg Upper Limit
+Hg EW
+Hg EW err
+Hg Line Flux
+Hg Line Flux err
+Hg Log Accretion Luminosity
+Hg Log Accretion Luminosity err
+Hg Accretion Rate
+Hg Accretion Rate err
+Hd Upper Limit
+Hd EW
+Hd EW err
+Hd Line Flux
+Hd Line Flux err
+Hd Log Accretion Luminosity
+Hd Log Accretion Luminosity err
+Hd Accretion Rate
+Hd Accretion Rate err
+Hep Upper Limit
+Hep EW
+Hep EW err
+Hep Line Flux
+Hep Line Flux err
+Hep Log Accretion Luminosity
+Hep Log Accretion Luminosity err
+Hep Accretion Rate
+Hep Accretion Rate err
+H8 Upper Limit
+H8 EW
+H8 EW err
+H8 Line Flux
+H8 Line Flux err
+H8 Log Accretion Luminosity
+H8 Log Accretion Luminosity err
+H8 Accretion Rate
+H8 Accretion Rate err
+H9 Upper Limit
+H9 EW
+H9 EW err
+H9 Line Flux
+H9 Line Flux err
+H9 Log Accretion Luminosity
+H9 Log Accretion Luminosity err
+H9 Accretion Rate
+H9 Accretion Rate err
+H10 Upper Limit
+H10 EW
+H10 EW err
+H10 Line Flux
+H10 Line Flux err
+H10 Log Accretion Luminosity
+Ha10 Log Accretion Luminosity err
+H10 Accretion Rate
+H10 Accretion Rate err
+H11 Upper Limit
+H11 EW
+H11 EW err
+H11 Line Flux
+H11 Line Flux err
+H11 Log Accretion Luminosity
+H1 Log Accretion Luminosity err
+H11 Accretion Rate
+H11 Accretion Rate err
+H12 Upper Limit
+H12 EW
+H12 EW err
+H12 Line Flux
+H12 Line Flux err
+H12 Log Accretion Luminosity
+H12 Log Accretion Luminosity err
+H12 Accretion Rate
+H12 Accretion Rate err
+H13 Upper Limit
+H13 EW
+H13 EW err
+H13 Line Flux
+H13 Line Flux err
+H13 Log Accretion Luminosity
+H13 Log Accretion Luminosity err
+H13 Accretion Rate
+H13 Accretion Rate err
+H14 Upper Limit
+H14 EW
+H14 EW err
+H14 Line Flux
+H14 Line Flux err
+H14 Log Accretion Luminosity
+H14 Log Accretion Luminosity err
+H14 Accretion Rate
+H14 Accretion Rate err
+H15 Upper Limit
+H15 EW
+H15 EW err
+H15 Line Flux
+H15 Line Flux err
+H15 Log Accretion Luminosity
+H15 Log Accretion Luminosity err
+H15 Accretion Rate
+H15 Accretion Rate err
+PaB Upper Limit
+PaB EW
+PaB EW err
+PaB Line Flux
+PaB Line Flux err
+PaB Log Accretion Luminosity
+PaB Log Accretion Luminosity err
+PaB Accretion Rate
+PaB Accretion Rate err
+PaG Upper Limit
+PaG EW
+PaG EW err
+PaG Line Flux
+PaG Line Flux err
+PaG Log Accretion Luminosity
+PaG Log Accretion Luminosity err
+PaG Accretion Rate
+PaG Accretion Rate err
+PaD Upper Limit
+PaD EW
+PaD EW err
+PaD Line Flux
+PaD Line Flux err
+PaD Log Accretion Luminosity
+PaD Log Accretion Luminosity err
+PaD Accretion Rate
+PaD Accretion Rate err
+Pa8 Upper Limit
+Pa8 EW
+Pa8 EW err
+Pa8 Line Flux
+Pa8 Line Flux err
+Pa8 Log Accretion Luminosity
+Pa8 Log Accretion Luminosity err
+Pa8 Accretion Rate
+Pa8 Accretion Rate err
+Pa9 Upper Limit
+Pa9 EW
+Pa9 EW err
+Pa9 Line Flux
+Pa9 Line Flux err
+Pa9 Log Accretion Luminosity
+Pa9 Log Accretion Luminosity err
+Pa9 Accretion Rate
+Pa9 Accretion Rate err
+Pa10 Upper Limit
+Pa10 EW
+Pa10 EW err
+Pa10 Line Flux
+Pa10 Line Flux err
+Pa10 Log Accretion Luminosity
+Pa10 Log Accretion Luminosity err
+Pa10 Accretion Rate
+Pa10 Accretion Rate err
+BrG Upper Limit
+BrG EW
+BrG EW err
+BrG Line Flux
+BrG Line Flux err
+BrG Log Accretion Luminosity
+BrG Log Accretion Luminosity err
+BrG Accretion Rate
+BrG Accretion Rate err
+Br8 Upper Limit
+Br8 EW
+Br8 EW err
+Br8 Line Flux
+Br8 Line Flux err
+Br8 Log Accretion Luminosity
+Br8 Log Accretion Luminosity err
+Br8 Accretion Rate
+Br8 Accretion Rate err
+PfB Upper Limit
+PfB EW
+PfB EW err
+PfB Line Flux
+PfB Line Flux err
+PfB Log Accretion Luminosity
+PfB Log Accretion Luminosity err
+PfB Accretion Rate
+PfB Accretion Rate err
+HeI 402.6 Upper Limit
+HeI 402.6 EW
+HeI 402.6 EW err
+HeI 402.6 Line Flux
+HeI 402.6 Line Flux err
+HeI 402.6 Log Accretion Luminosity
+HeI 402.6 Log Accretion Luminosity err
+HeI 402.6 Accretion Rate
+HeI 402.6 Accretion Rate err
+HeI 447.1 Upper Limit
+HeI 447.1 EW
+HeI 447.1 EW err
+HeI 447.1 Line Flux
+HeI 447.1 Line Flux err
+HeI 447.1 Log Accretion Luminosity
+HeI 447.1 Log Accretion Luminosity err
+HeI 447.1 Accretion Rate
+HeI 447.1 Accretion Rate err
+HeI 471.3 Upper Limit
+HeI 471.3 EW
+HeI 471.3 EW err
+HeI 471.3 Line Flux
+HeI 471.3 Line Flux err
+HeI 471.3 Log Accretion Luminosity
+HeI 471.3 Log Accretion Luminosity err
+HeI 471.3 Accretion Rate
+HeI 471.3 Accretion Rate err
+HeI 501.6 Upper Limit
+HeI 501.6 EW
+HeI 501.6 EW err
+HeI 501.6 Line Flux
+HeI 501.6 Line Flux err
+HeI 501.6 Log Accretion Luminosity
+HeI 501.6 Log Accretion Luminosity err
+HeI 501.6 Accretion Rate
+HeI 501.6 Accretion Rate err
+HeI 587.6 Upper Limit
+HeI 587.6 EW
+HeI 587.6 EW err
+HeI 587.6 Line Flux
+HeI 587.6 Line Flux err
+HeI 587.6 Log Accretion Luminosity
+HeI 587.6 Log Accretion Luminosity err
+HeI 587.6 Accretion Rate
+HeI 587.6 Accretion Rate err
+HeI 667.8 Upper Limit
+HeI 667.8 EW
+HeI 667.8 EW err
+HeI 667.8 Line Flux
+HeI 667.8 Line Flux err
+HeI 667.8 Log Accretion Luminosity
+HeI 667.8 Log Accretion Luminosity err
+HeI 667.8 Accretion Rate
+HeI 667.8 Accretion Rate err
+HeI 706.5 Upper Limit
+HeI 706.5 EW
+HeI 706.5 EW err
+HeI 706.5 Line Flux
+HeI 706.5 Line Flux err
+HeI 706.5 Log Accretion Luminosity
+HeI 706.5 Log Accretion Luminosity err
+HeI 706.5 Accretion Rate
+HeI 706.5 Accretion Rate err
+HeI 1083 Upper Limit
+HeI 1083 EW
+HeI 1083 EW err
+HeI 1083 Line Flux
+HeI 1083 Line Flux err
+HeI 1083 Log Accretion Luminosity
+HeI 1083 Log Accretion Luminosity err
+HeI 1083 Accretion Rate
+HeI 1083 Accretion Rate err
+HeII 468.6 Upper Limit
+HeII 468.6 EW
+HeII 468.6 EW err
+HeII 468.6 Line Flux
+HeII 468.6 Line Flux err
+HeII 468.6 Log Accretion Luminosity
+HeII 468.6 Log Accretion Luminosity err
+HeII 468.6 Accretion Rate
+HeII 468.6 Accretion Rate err
+CaII K 393.4 Upper Limit
+CaII K 393.4 EW
+CaII K 393.4 EW err
+CaII K 393.4 Line Flux
+CaII K 393.4 Line Flux err
+CaII K 393.4 Log Accretion Luminosity
+CaII K 393.4 Log Accretion Luminosity err
+CaII K 393.4 Accretion Rate
+CaII K 393.4 Accretion Rate err
+CaII H 396.9 Upper Limit
+CaII H 396.9 EW
+CaII H 396.9 EW err
+CaII H 396.9 Line Flux
+CaII H 396.9 Line Flux err
+CaII H 396.9 Log Accretion Luminosity
+CaII H 396.9 Log Accretion Luminosity err
+CaII H 396.9 Accretion Rate
+CaII H 396.9 Accretion Rate err
+CaII 849.8 Upper Limit
+CaII 849.8 EW
+CaII 849.8 EW err
+CaII 849.8 Line Flux
+CaII 849.8 Line Flux err
+CaII 849.8 Log Accretion Luminosity
+CaII 849.8 Log Accretion Luminosity err
+CaII 849.8 Accretion Rate
+CaII 849.8 Accretion Rate err
+CaII 854.2 Upper Limit
+CaII 854.2 EW
+CaII 854.2 EW err
+CaII 854.2 Line Flux
+CaII 854.2 Line Flux err
+CaII 854.2 Log Accretion Luminosity
+CaII 854.2 Log Accretion Luminosity err
+CaII 854.2 Accretion Rate
+CaII 854.2 Accretion Rate err
+CaII 866.2 Upper Limit
+CaII 866.2 EW
+CaII 866.2 EW err
+CaII 866.2 Line Flux
+CaII 866.2 Log Line Flux
+CaII 866.2 Line Flux err
+CaII 866.2 Log Accretion Luminosity
+CaII 866.2 Log Accretion Luminosity err
+CaII 866.2 Accretion Rate
+CaII 866.2 Accretion Rate err
+NaI 588.9 Upper Limit
+NaI 588.9 EW
+NaI 588.9 EW err
+NaI 588.9 Line Flux
+NaI 588.9 Line Flux err
+NaI 588.9 Log Accretion Luminosity
+NaI 588.9 Log Accretion Luminosity err
+NaI 588.9 Accretion Rate
+NaI 588.9 Accretion Rate err
+NaI 589.6 Upper Limit
+NaI 589.6 EW
+NaI 589.6 EW err
+NaI 589.6 Line Flux
+NaI 589.6 Line Flux err
+NaI 589.6 Log Accretion Luminosity
+NaI 589.6 Log Accretion Luminosity err
+NaI 589.6 Accretion Rate
+NaI 589.6 Accretion Rate err
+Li 670.8 EW
+OI 844.6 Upper Limit
+OI 844.6 EW
+OI 844.6 EW err
+OI 844.6 Line Flux
+OI 844.6 Line Flux err
+OI 844.6 Log Accretion Luminosity
+OI 844.6 Log Accretion Luminosity err
+OI 844.6 Accretion Rate
+OI 844.6 Accretion Rate err
+CIV 154.9 Upper Limit
+CIV 154.9 EW
+CIV 154.9 EW err
+CIV 154.9 Line Flux
+CIV 154.9 Line Flux err
+CIV 154.9 Log Accretion Luminosity
+CIV 154.9 Log Accretion Luminosity err
+CIV 154.9 Accretion Rate
+CIV 154.9 Accretion Rate err
+Upper Limit
+Log Accretion Luminosity
+Log Accretion Luminosity err
+Accretion Rate
+Accretion Rate err
+Scaling Relation Reference
+SpTemp Conversion Reference
+Evolutionary Models Reference
+Notes
+Links
+Simbad
