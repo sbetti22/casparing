@@ -1,5 +1,5 @@
 # casparing
-casparing is the toolkit used to rederive and extract parameters for the Comprehensive Archive of SubStellar and Planetary Accretion Rates (CASPAR). 
+casparing is the toolkit used to rederive and extract parameters for the Comprehensive Archive of SubStellar and Planetary Accretion Rates (CASPAR) from [Betti et al (2023)](https://ui.adsabs.harvard.edu/abs/2023AJ....166..262B/abstract)
 
 There are tools available to extract SIMBAD ra, dec, magnitudes, and GAIA distances and parallaxes.  Additionally, the toolkit uses Baraffe+2015 and MIST MESA evolutionary models to extract physical parameters such as stellar Mass and Radius. Finally, with a known accretion line flux or luminosity accretion rates can be rederived to be self consistent with the rest of CASPAR. 
 
@@ -79,7 +79,7 @@ cdp.params()
 
 ## Attribution
 
-Please cite Betti et al. (2023) whenever results from CASPAR or ```casparing``` are used in a publication as well as the many relevant papers and catalogues that the derivations use, including 2MASS, Gaia, Alcala et al., (2017), and Banyan Σ.    
+Please cite [Betti et al. (2023)](https://ui.adsabs.harvard.edu/abs/2023AJ....166..262B/abstract) whenever results from CASPAR or ```casparing``` are used in a publication as well as the many relevant papers and catalogues that the derivations use, including 2MASS, Gaia, Alcala et al., (2017), and Banyan Σ.    
 
 
 ## License
