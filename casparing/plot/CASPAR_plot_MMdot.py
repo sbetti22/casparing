@@ -1,7 +1,7 @@
-import CASPAR_plotting as cplot
-import CASPAR_util as cutil
-import CASPAR_sortdata as csort
-import CASPAR_fitMMdot as cfit
+import .CASPAR_plotting as cplot
+import .CASPAR_util as cutil
+import .CASPAR_sortdata as csort
+import .CASPAR_fitMMdot as cfit
 
 import os
 import numpy as np

@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
-from CASPAR_util import AccDiagColor
+from .CASPAR_util import AccDiagColor
 color = AccDiagColor()
 import seaborn as sns
 

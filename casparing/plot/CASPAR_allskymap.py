@@ -8,7 +8,7 @@ from astropy.wcs import WCS
 from astropy.coordinates import SkyCoord
 from astropy.visualization.wcsaxes.frame import EllipticalFrame
 
-import CASPAR_plotting as cplot
+import .CASPAR_plotting as cplot
 import warnings
 warnings.filterwarnings("ignore")
 
