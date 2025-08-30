@@ -3,7 +3,7 @@ __license__ = "MIT"
 __maintainer__ = "Sarah Betti"
 __email__ = "sbetti22@gmail.com"
 
-from .plot import CASPAR_fitMMdot.py
+from .plot import CASPAR_fitMMdot
 
 from .derive import CASPAR_astrometry
 from .derive import CASPAR_rederiveaccretion
