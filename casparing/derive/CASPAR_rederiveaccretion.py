@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import .rederiveaccretion as cra
+import rederiveaccretion as cra
 
 
 def derive_newMdot(row, unc):
