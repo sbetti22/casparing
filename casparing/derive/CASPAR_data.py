@@ -9,7 +9,7 @@ def add_astrometry_objects(object_names, colname=None):
                 df = df[colname].rename({colname:'obj'})
         else:
             df = pd.DataFrame({'obj':[object_names]})
-    elif isinstance(object_names, (list, nd.array)):
+    elif isinstance(object_names, (list, np.ndarray)):
         object_names = np.array(object_names)
         if object_names.ndim > 1:
             raise ValueError(f'if obj is a list or nd.array, it must be 1-d.  obj is current {obj.ndim}-d')
