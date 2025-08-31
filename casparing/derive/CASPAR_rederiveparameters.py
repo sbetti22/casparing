@@ -25,34 +25,7 @@ def _phys_quants(row):
     row['Evolutionary Models Reference'] = ICwon
     return row
     
-    
-def create_table(object_name, age, age_err, value_id, value, value_err):
-    if isinstance(object_name, str):
-        object_name = [object_name]
 
-    if isinstance(age, (float, int)):
-        age = [age]
-
-    if isinstance(age_err, (float, int)):
-        age_err = [age_err]
-
-    if isinstance(value, (float, int, str)):
-        value = [value]
-
-    if (value_id == 'sptype') or (value_id == 'SpType'):
-        value_id = 'Sp Type'
-
-    if (value_id == 'mass'):
-        value_id = Mass
-    if (value_id == 'teff') or (value_id == 'temp') or (value_id == 'temperature'):
-        value_id = 'Teff'
-
-    if isinstance(value_err, (float, int, str)):
-        value_err = [value_err]
-
-    d = {'Reference Name':object_name, 'Age':age, 'Age err':age_err, value_id:value, value_id + ' err':value_err}
-    df = pd.DataFrame(d)
-    return df
 
 class get_physical_params:
     def __init__(self, df=None):

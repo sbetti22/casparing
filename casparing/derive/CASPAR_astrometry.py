@@ -22,6 +22,15 @@ warnings.filterwarnings('ignore')
 
 from casparing.derive.banyansigma_core import membership_probability
 
+
+
+
+def multi_query_simbad(df):
+    simbad_tables = df['obj'].progress_apply(cmetry.query_simbad)
+    # simbad_table is list of pandas dataframes for each object.  After
+    tab = pd.concat([t for t in table], ignore_index=True)
+
+
 def query_simbad(obj, verbose=False):
     '''
     inputs:
@@ -547,26 +556,6 @@ def get_ages(tab, verbose=False):
     return tab
 
 
-def save_df(df, savename):
-    columns = ['Simbad-Resolvable Name', 'Reference Name', 'RA (J2000.0)',
-       'Dec (J2000.0)', 'RA (J2016.0)', 'Dec (J2016.0)', 'Association', 'Association Probability Banyan Sigma', 
-               'Association Census Reference', 'Association Age', 'Association Age err', 'GAIA DR2 Source ID',
-       'GAIA DR2 Parallax', 'GAIA DR2 Parallax err',
-       'GAIA DR2 Reliable Parallax', 'GAIA DR2 Distance',
-       'GAIA DR2 Distance lower limit', 'GAIA DR2 Distance upper limit',
-       'GAIA DR2 RA proper motion', 'GAIA DR2 RA proper motion err',
-       'GAIA DR2 Dec proper motion', 'GAIA DR2 Dec proper motion err',
-       'GAIA EDR3 Source ID', 'GAIA EDR3 Parallax', 'GAIA EDR3 Parallax err',
-       'GAIA EDR3 Reliable Parallax', 'GAIA EDR3 Geometric Distance',
-       'GAIA EDR3 Geometric Distance lower limit', 'GAIA EDR3 Geometric Distance upper limit',
-       'GAIA EDR3 RA proper motion', 'GAIA EDR3 RA proper motion err',
-       'GAIA EDR3 Dec proper motion', 'GAIA EDR3 Dec proper motion err',
-       'radial velocity', 'radial velocity err', 'Jmag', 'Jmag err',
-       'Hmag', 'Hmag err', 'Kmag', 'Kmag err', 'Links']
-    
-    df[['GAIA DR2 Source ID', 'GAIA EDR3 Source ID']] = df[['GAIA DR2 Source ID', 'GAIA EDR3 Source ID']].astype(str)
-    df.to_csv(savename,
-          columns=columns)
-    
+
 
             

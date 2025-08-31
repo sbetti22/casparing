@@ -50,26 +50,4 @@ def accretion_properties(df, unc=True):
     return df
 
 
-def put_in_caspar_order(df):
-    HERE = os.path.dirname(os.path.abspath(__file__))
-    fil = os.path.join(HERE, '../data/accretion_data/caspar_columns.txt')
-
-    cc = pd.read_csv(fil, header=None)
-    caspar_cols = cc[0].values
-    finaldf = pd.DataFrame(columns=caspar_cols)
-    for column in list(df.columns):
-        if column in caspar_cols:
-            finaldf[column] = df[column]
-        else:
-            print(f'{column} not in caspar.')
-    return finaldf
-
-def save_df(df, savename):
-    df.to_csv(savename, index=False)
-    
-    
-    
-    
-    
-    
     
