@@ -1,4 +1,6 @@
-
+import os
+import numpy as np
+import pandas as pd
 
 
 def add_astrometry_objects(object_names, colname=None):
