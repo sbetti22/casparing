@@ -26,10 +26,10 @@ from casparing.derive.banyansigma_core import membership_probability
 
 
 def multi_query_simbad(df):
-    simbad_tables = df['obj'].progress_apply(query_simbad)
+    tabs = df['obj'].progress_apply(query_simbad)
     # simbad_table is list of pandas dataframes for each object.  After
-    tab = pd.concat([t for t in table], ignore_index=True)
-    return tab
+    simbad_table = pd.concat([t for t in tabs], ignore_index=True)
+    return simbad_table
 
 
 def query_simbad(obj, verbose=False):
