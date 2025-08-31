@@ -24,7 +24,7 @@ def add_astrometry_objects(object_names, colname=None):
         raise ValueError(f'obj must either be: 1D text file with extension .csv, .txt. or .dat, a 1D list or numpy.ndarray, or a 1D pandas dataframe')
     return df
         
-def add_accretion_objects(object_names, age=None, age_err=None, value_id=None, value=None, value_err=None):
+def add_physparams_objects(object_names, age=None, age_err=None, value_id=None, value=None, value_err=None):
     if isinstance(object_names, str):
         if ('.csv' in object_names) or ('.txt' in object_names) or ('.dat' in object_names):
             df = pd.read_csv(object_names)
