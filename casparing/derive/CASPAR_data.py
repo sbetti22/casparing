@@ -86,7 +86,7 @@ def save_astrometry_df(df, savename):
        'Hmag', 'Hmag err', 'Kmag', 'Kmag err', 'Links']
     
     df[['GAIA DR2 Source ID', 'GAIA EDR3 Source ID']] = df[['GAIA DR2 Source ID', 'GAIA EDR3 Source ID']].astype(str)
-    df.to_csv(savename, columns=columns)
+    df.to_csv(savename, columns=columns, index=False)
     
 def put_in_caspar_order(df):
     HERE = os.path.dirname(os.path.abspath(__file__))
