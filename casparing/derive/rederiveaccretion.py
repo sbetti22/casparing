@@ -13,6 +13,7 @@
 #https://isochrones.readthedocs.io/en/latest/
 #https://ui.adsabs.harvard.edu/abs/2015ascl.soft03010M/abstract (Morton2015)
 
+import os
 import numpy as np
 import pandas as pd
 
