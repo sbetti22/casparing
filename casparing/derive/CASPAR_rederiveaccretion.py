@@ -1,12 +1,13 @@
 import pandas as pd
 import numpy as np
-import casparing.derive.rederiveaccretion as cra
+from casparing.derive.rederiveaccretion import CASPAR_derive_newMdot
+
 from pandarallel import pandarallel
 pandarallel.initialize(progress_bar=True)
 
 def derive_newMdot(row, unc):
 
-    updated_vals, logaccLum, AccRate, scaleRef, lineFlux = cra.CASPAR_derive_newMdot(row, unc=unc).rederiveRun()
+    updated_vals, logaccLum, AccRate, scaleRef, lineFlux = CASPAR_derive_newMdot(row, unc=unc).rederiveRun()
     
     if unc:
         logaccLum, logaccLumerr = logaccLum
