@@ -7,7 +7,7 @@ from pandarallel import pandarallel
 pandarallel.initialize(progress_bar=True)
 
 def _phys_quants(row):
-    params =  cpm.physical_params(row['FIN AGE'], value=row['VAL'])
+    params =  physical_params(row['FIN AGE'], value=row['VAL'])
 
     sptype, specnum, Teff, mass, radius, lum, logg, STwon, ICwon = params.get_params(which_models=True)
     masserr, tefferr, raderr, lumerr = params.uncertainty(row['FIN AGE ERR'], row['VAL ERR'], sptype=sptype, mass=mass, radius=radius, lum=lum, logg=logg)
