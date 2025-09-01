@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
 import casparing.derive.rederiveaccretion as cra
-
+from pandarallel import pandarallel
+pandarallel.initialize(progress_bar=True)
 
 def derive_newMdot(row, unc):
 
