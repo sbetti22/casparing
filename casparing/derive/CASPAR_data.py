@@ -24,57 +24,129 @@ def add_astrometry_objects(object_names, colname=None):
         raise ValueError(f'obj must either be: 1D text file with extension .csv, .txt. or .dat, a 1D list or numpy.ndarray, or a 1D pandas dataframe')
     return df
         
-def add_physparams_objects(object_names, age=None, age_err=None, value_id=None, value=None, value_err=None):
+def add_physparams_objects(object_names, age=None, age_err=None, value_id=None, value=None, value_err=None, verbose=True):
     if isinstance(object_names, str):
         if ('.csv' in object_names) or ('.txt' in object_names) or ('.dat' in object_names):
+            if verbose: print(object_names + ' path provided.  Opening file as pd.DataFrame.')
             df = pd.read_csv(object_names)
             cols = list(df.columns)
-            if (('Reference Name' not in cols) or ('Age' not in cols) or ('Age err' not in cols) or ('Sp Type' not in cols) or ('Mass' not in cols) or ('Teff' not in cols) or ('Mass err' not in cols) or ('Sp Type err' not in cols) or ('Teff err' not in cols)) and ((age is None) or (age_err is None) or (value_id is None) or (value is None) or (value_err is None)):
-                raise ValueError('column names must be: Reference Name, Age, Age err, and one of [Sp Type, Mass, Teff], and [Sp Type err, Mass err, Teff err].')
-            else:
+            
+            if (('Reference Name' in cols) and ('Age' in cols) and ('Age err' in cols) and ( (('Sp Type' in cols) and ('Sp Type err' in cols)) or (('Mass' in cols) and ('Mass err' in cols))  or (('Teff' in cols) and ('Teff err' in cols)) )):  
+                if verbose: print('All required columns are provided.')
                 return df
+        
+            if verbose: print('All required columns not in dataframe.  checking if they are provided as variables.')
+            msg = ''
+            if ((age is None) and ('Age' not in cols)):
+                msg += '"Age" must be a column in dataframe or provided as a list as "age" variable. '
+            if ((age_err is None) and ('Age err' not in cols)):
+                msg += '"Age err" must be a column in dataframe or provided as a list as "age_err" variable. '
+            if ((value_id is None) and (value_id not in cols)):
+                msg += '"Sp Type", "Mass" or "Teff" must be a column in dataframe or provided as value_id.'
+            if  (value is None):
+                msg += '"Sp Type", "Mass" or "Teff" must be a column in dataframe or provided as a list as "value" variable. '
+            if (value_err is None):
+                msg += '"Sp Type err", "Mass err" or "Teff err" must be a column in dataframe or provided as a list as "value_err" variable. '
+            if msg != '':    
+                raise ValueError(msg)
         else:
+            
             object_names = [object_names]
             
     if isinstance(object_names, pd.DataFrame):
+        if verbose: print('DataFrame added.')
         df = object_names
         cols = list(df.columns)
-        if (('Reference Name' not in cols) or ('Age' not in cols) or ('Age err' not in cols) or ('Sp Type' not in cols) or ('Mass' not in cols) or ('Teff' not in cols) or ('Mass err' not in cols) or ('Sp Type err' not in cols) or ('Teff err' not in cols)) and ((age is None) or (age_err is None) or (value_id is None) or (value is None) or (value_err is None)):
-            raise ValueError('column names must be: Reference Name, Age, Age err, and one of [Sp Type, Mass, Teff], and [Sp Type err, Mass err, Teff err].')
-        else:
+        if (('Reference Name' in cols) and ('Age' in cols) and ('Age err' in cols) and ( (('Sp Type' in cols) and ('Sp Type err' in cols)) or (('Mass' in cols) and ('Mass err' in cols))  or (('Teff' in cols) and ('Teff err' in cols)) )):  
+            if verbose: 
+                print('All required columns are provided.')
+                display(df)
             return df
-        
-    if (age is None) or (age_err is None) or (value_id is None) or (value is None) or (value_err is None):
-        raise ValueError('if object_names is not filepath or dataframe, age, age_err, value_id, value, and value_err must be provided' )
-            
-    if isinstance(age, (float, int)):
-        age = [age]
-
-    if isinstance(age_err, (float, int)):
-        age_err = [age_err]
-
-    if isinstance(value, (float, int, str)):
-        value = [value]
-
-    if (value_id == 'sptype') or (value_id == 'SpType'):
-        value_id = 'Sp Type'
-    if (value_id == 'mass'):
-        value_id = 'Mass'
-    if (value_id == 'teff') or (value_id == 'temp') or (value_id == 'temperature'):
-        value_id = 'Teff'
-
-    if isinstance(value_err, (float, int, str)):
-        value_err = [value_err]
-        
+        else:
+            if verbose: print('All required columns not in dataframe.  checking if they are provided as variables.')
+            msg = ''
+            if ((age is None) and ('Age' not in cols)):
+                msg += '"Age" must be a column in dataframe or values provided as a list as "age" variable. '
+            if ((age_err is None) and ('Age err' not in cols)):
+                msg += '"Age err" must be a column in dataframe or values provided as a list as "age_err" variable. '
+            if (value_id is None) and (('Mass' not in cols) or ('Teff' not in cols) or ('Sp Type' not in cols)):
+                msg += '"Sp Type", "Mass" or "Teff" must be a column in dataframe or provided as value_id. '
+                
+            if (value is None) and ((('Mass' not in cols) or ('Teff' not in cols) or ('Sp Type' not in cols))):
+                msg += '"Sp Type", "Mass" or "Teff" must be a column in dataframe or values provided as a list as "value" variable. '
+                
+            if (value_err is None) and ((('Mass err' not in cols) or ('Teff err' not in cols) or ('Sp Type err' not in cols))):
+                msg += '"Sp Type err", "Mass err" or "Teff err" must be a column in dataframe or values provided as a list as "value_err" variable. '
+            if msg != '':    
+                raise ValueError(msg)
+     
     if isinstance(object_names, list):
-        d = {'Reference Name':object_names, 'Age':age, 'Age err':age_err, value_id:value, value_id + ' err':value_err}
-        df = pd.DataFrame(d)
+        if verbose: print('Object Names provided.  New dataframe being created.')
+        msg = ''
+        if (age is None):
+            msg += '"age" must be a provided. '
+        if (age_err is None):
+            msg += '"age_err" must be provided. '
+        if (value_id is None):
+            msg += 'value_id must be "Sp Type", "Mass" or "Teff".'
+        if  (value is None):
+            msg += 'value must be provided. '
+        if (value_err is None):
+            msg += 'value_err must be provided. '
+        if msg != '':    
+            raise ValueError(msg)
+        df = pd.DataFrame()
+
+    cols = list(df.columns)
+    if 'Reference Name' not in cols:
+        if isinstance(object_names, list):
+            if verbose: print('Reference Name added to dataframe')
+            df['Reference Name'] = object_names
     else:
+        if verbose: print('Reference Name already in dataframe')
+        
+    if 'Age' not in cols:
+        if verbose: print('Age added to dataframe')
+        if isinstance(age, (float, int)):
+            age = [age]
         df['Age'] = age
+    else:
+        if verbose: print('Age already in dataframe.')
+
+    if 'Age err' not in cols:
+        if verbose: print('Age err added to dataframe')
+        if isinstance(age_err, (float, int)):
+            age_err = [age_err]
         df['Age err'] = age_err
+    else:
+        if verbose: print('Age err already in dataframe')
+
+    if (value_id == 'sptype') or (value_id == 'SpType') or (value_id == 'Sp Type'):
+        value_id = 'Sp Type'
+    elif (value_id == 'mass') or (value_id == 'Mass'):
+        value_id = 'Mass'
+    elif (value_id == 'teff') or (value_id == 'temp') or (value_id == 'temperature') or (value_id == 'Teff'):
+        value_id = 'Teff'
+    else:
+        raise ValueError(f'{value_id} not a valid option. Choices are "sptype", "SpType" and "Sp Type", "mass" and "Mass", or "teff", "temp", "temperature" and "Teff"')
+        
+    if value_id not in cols:
+        if verbose: print(f'{value_id} added to dataframe')
+        if isinstance(value, (float, int, str)):
+            value = [value]
         df[value_id] = value
+    else:
+        if verbose: print(f'{value_id} already in dataframe')
+        
+    if value_id + ' err' not in cols:
+        if verbose: print(f'{value_id} err added to dataframe')
+        if isinstance(value_err, (float, int, str)):
+            value_err = [value_err]
         df[value_id + ' err'] = value_err
-        return df
+    else:
+        if verbose: print(f'{value_id} err already in dataframe')
+    return df
+    
 
 def save_astrometry_df(df, savename):
     columns = ['Simbad-Resolvable Name', 'Reference Name', 'RA (J2000.0)',
