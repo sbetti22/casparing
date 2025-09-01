@@ -29,18 +29,20 @@ def add_physparams_objects(object_names, age=None, age_err=None, value_id=None, 
         if ('.csv' in object_names) or ('.txt' in object_names) or ('.dat' in object_names):
             df = pd.read_csv(object_names)
             cols = list(df.columns)
-            if ('Reference Name' not in cols) or ('Age' not in cols) or ('Age err' not in cols) or ('Sp Type' not in cols) or ('Mass' not in cols) or ('Teff' not in cols) or ('Mass err' not in cols) or ('Sp Type err' not in cols) or ('Teff err' not in cols):
+            if (('Reference Name' not in cols) or ('Age' not in cols) or ('Age err' not in cols) or ('Sp Type' not in cols) or ('Mass' not in cols) or ('Teff' not in cols) or ('Mass err' not in cols) or ('Sp Type err' not in cols) or ('Teff err' not in cols)) and ((age is None) or (age_err is None) or (value_id is None) or (value is None) or (value_err is None)):
                 raise ValueError('column names must be: Reference Name, Age, Age err, and one of [Sp Type, Mass, Teff], and [Sp Type err, Mass err, Teff err].')
-            return df
-            
+            else:
+                return df
         else:
             object_names = [object_names]
             
     if isinstance(object_names, pd.DataFrame):
         df = object_names
         cols = list(df.columns)
-        if ('Reference Name' not in cols) or ('Age' not in cols) or ('Age err' not in cols) or ('Sp Type' not in cols) or ('Mass' not in cols) or ('Teff' not in cols) or ('Mass err' not in cols) or ('Sp Type err' not in cols) or ('Teff err' not in cols):
+        if (('Reference Name' not in cols) or ('Age' not in cols) or ('Age err' not in cols) or ('Sp Type' not in cols) or ('Mass' not in cols) or ('Teff' not in cols) or ('Mass err' not in cols) or ('Sp Type err' not in cols) or ('Teff err' not in cols)) and ((age is None) or (age_err is None) or (value_id is None) or (value is None) or (value_err is None)):
             raise ValueError('column names must be: Reference Name, Age, Age err, and one of [Sp Type, Mass, Teff], and [Sp Type err, Mass err, Teff err].')
+        else:
+            return df
         
     if (age is None) or (age_err is None) or (value_id is None) or (value is None) or (value_err is None):
         raise ValueError('if object_names is not filepath or dataframe, age, age_err, value_id, value, and value_err must be provided' )
@@ -63,10 +65,16 @@ def add_physparams_objects(object_names, age=None, age_err=None, value_id=None, 
 
     if isinstance(value_err, (float, int, str)):
         value_err = [value_err]
-
-    d = {'Reference Name':object_name, 'Age':age, 'Age err':age_err, value_id:value, value_id + ' err':value_err}
-    df = pd.DataFrame(d)
-    return df
+        
+    if isinstance(object_names, list):
+        d = {'Reference Name':object_names, 'Age':age, 'Age err':age_err, value_id:value, value_id + ' err':value_err}
+        df = pd.DataFrame(d)
+    else:
+        df['Age'] = age
+        df['Age err'] = age_err
+        df[value_id] = value
+        df[value_id + ' err'] = value_err
+        return df
 
 def save_astrometry_df(df, savename):
     columns = ['Simbad-Resolvable Name', 'Reference Name', 'RA (J2000.0)',
