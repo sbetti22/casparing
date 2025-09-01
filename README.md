@@ -41,7 +41,7 @@ After installation, install ```linmix``` [https://linmix.readthedocs.io/en/lates
 
 
 ## To Run
-Example notebooks are in the works.  Please check back from tutorials.  
+Example notebooks are currently WIP. 
 
 To run any of the plotting notebooks, you need to download CASPAR and the Literature Database as a .csv file which can be found at [https://doi.org/10.5281/zenodo.8393053](https://doi.org/10.5281/zenodo.8393053) or through [https://ui.adsabs.harvard.edu/abs/2023AJ....166..262B/abstract](https://ui.adsabs.harvard.edu/abs/2023AJ....166..262B/abstract). 
 
