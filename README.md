@@ -84,6 +84,6 @@ Please cite [Betti et al. (2023)](https://ui.adsabs.harvard.edu/abs/2023AJ....16
 
 ## License
 
-Copyright 2025 Sarah Betti.
+Copyright 2025 S. Betti.
 
 ```casparing``` is distributed under the MIT License. See LICENSE for the terms and conditions.
