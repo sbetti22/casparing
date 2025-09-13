@@ -190,6 +190,8 @@ def _line_fitting(ax, df_caspar, fit_data=True, colorby='object', **kwargs):
         fitname = kwargs.get('fitname', 'doLinearFit')
         print(fitname)
         if kwargs.get('fit_mass_regions'):
+            stars, bds, planets, [Sreg, Supp], [BDreg, BDupp], [Preg, Pupp] = csort.CASPAR_separateByMass(df_caspar)
+            
             if fitname == 'doLinearFit':
                 eS, eBD, eP = '','',''
             else:
