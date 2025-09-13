@@ -11,22 +11,26 @@ def CASPAR_loaddata(lit_database=None, caspar=None):
     if caspar is None:
         url = 'https://drive.google.com/uc?id=1QbJHcrndhaP2JIrBazy4zcUULpgClCdt76nMilKfRNs'
         output = "caspar.xlsx"
-
+        gdown.download(url, output)
+        
         df_caspar = pd.read_excel('caspar.xlsx', sheet_name='CASPAR', skiprows=[1])
 
     else:
         df_caspar = pd.read_csv(caspar, skiprows=[1])
-        df_caspar["Ha EW"] = pd.to_numeric(df_caspar["Ha EW"])
+        
+
         
     if lit_database is None:
         url = 'https://drive.google.com/uc?id=1QbJHcrndhaP2JIrBazy4zcUULpgClCdt76nMilKfRNs'
         output = "caspar.xlsx"
+        gdown.download(url, output)
         
         df_lit = pd.read_excel('caspar.xlsx', sheet_name='Literature Database', skiprows=[1])
 
     else:
-        df_lit = pd.read_csv(lit_database)
-        df_lit["Ha EW"] = pd.to_numeric(df_lit["Ha EW"])
+        df_lit = pd.read_csv(lit_database, skiprows=[1])
+    df_lit['Ha EW'] = df_lit['Ha EW'].astype(str).str.replace(",", "").astype(float)
+    df_caspar['Ha EW'] = df_caspar['Ha EW'].astype(str).str.replace(",", "").astype(float)
     
     df_lit = df_lit.sort_values(by=['Unique ID'], ignore_index=True)
     df_caspar = df_caspar.sort_values(by=['Unique ID'], ignore_index=True)
@@ -89,6 +93,7 @@ def CASPAR_loaddata(lit_database=None, caspar=None):
     df_lit['Upper Limit bool'] = df_lit['Upper Limit'] != 'UPP' # true is detected, false is upper limit
     
     planets = df_lit.loc[(df_lit['Companion']=='COM') & (df_lit['Mass']<=0.075)]
+    planets = planets.astype(df_caspar.dtypes.to_dict())
     df_caspar.loc[planets.index, :] = planets[:]
     
     return df_lit, df_caspar
