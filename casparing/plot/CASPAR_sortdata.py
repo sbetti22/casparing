@@ -16,6 +16,7 @@ def CASPAR_loaddata(lit_database=None, caspar=None):
 
     else:
         df_caspar = pd.read_csv(caspar, skiprows=[1])
+        df_caspar["Ha EW"] = pd.to_numeric(df_caspar["Ha EW"])
         
     if lit_database is None:
         url = 'https://drive.google.com/uc?id=1QbJHcrndhaP2JIrBazy4zcUULpgClCdt76nMilKfRNs'
@@ -24,7 +25,8 @@ def CASPAR_loaddata(lit_database=None, caspar=None):
         df_lit = pd.read_excel('caspar.xlsx', sheet_name='Literature Database', skiprows=[1])
 
     else:
-        df_lit = pd.read_csv(lit_database, skiprows=[1])
+        df_lit = pd.read_csv(lit_database)
+        df_lit["Ha EW"] = pd.to_numeric(df_lit["Ha EW"])
     
     df_lit = df_lit.sort_values(by=['Unique ID'], ignore_index=True)
     df_caspar = df_caspar.sort_values(by=['Unique ID'], ignore_index=True)
