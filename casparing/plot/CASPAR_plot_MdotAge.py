@@ -135,7 +135,7 @@ def MdotVSage(df_caspar, colorby='mass', scaleByMass=True, fit_data=True, **kwar
                 fitname = fitname + ' MdotVSAge'
             print('max log Mdot = ',round(df_caspar['log Mdot'].max(), 3), 'Msun/yr' )
             fitparams = cfit.linmix_fitting(df_caspar, fitname=fitname, xval='Age', 
-                                       plot=False, ax=ax, extend=False, as_list=False, color='k')
+                                       plot=True, ax=ax, extend=False, as_list=False, color='k')
             N, slope, slopeerrlow, slopeerrupp, intercept, intercepterrlow, intercepterrupp, stdfit, r2 = fitparams
             print('best fit parameters')
             print(f'N = {N}, std= {stdfit:.3}, R2 = {r2:.3}')
