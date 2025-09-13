@@ -16,7 +16,12 @@ def CASPAR_loaddata(lit_database=None, caspar=None):
         df_caspar = pd.read_excel('caspar.xlsx', sheet_name='CASPAR', skiprows=[1])
 
     else:
-        df_caspar = pd.read_csv(caspar, skiprows=[1])
+        if '.csv' in caspar:
+            df_caspar = pd.read_csv(caspar, skiprows=[1])
+        elif '.xlsx' in caspar:
+            df_caspar = pd.read_excel(caspar, sheet_name='CASPAR', skiprows=[1])
+        else:
+            raise ValueError('caspar must be a .csv or .xlsx with a sheet named CASPAR to load.')
         
 
         
@@ -28,7 +33,13 @@ def CASPAR_loaddata(lit_database=None, caspar=None):
         df_lit = pd.read_excel('caspar.xlsx', sheet_name='Literature Database', skiprows=[1])
 
     else:
-        df_lit = pd.read_csv(lit_database, skiprows=[1])
+        if '.csv' in lit_database:
+            df_lit = pd.read_csv(lit_database, skiprows=[1])
+        elif '.xlsx' in lit_database:
+            df_lit = pd.read_excel(lit_database, sheet_name='Literature Database', skiprows=[1])
+        else:
+            raise ValueError('lit_database must be a .csv or .xlsx with a sheet named Literature Database to load.')
+        
     df_lit['Ha EW'] = df_lit['Ha EW'].astype(str).str.replace(",", "").astype(float)
     df_caspar['Ha EW'] = df_caspar['Ha EW'].astype(str).str.replace(",", "").astype(float)
     
