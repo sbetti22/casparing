@@ -1,3 +1,7 @@
+'''
+plotting all sky map to show locations of CASPAR objects
+'''
+
 import numpy as np
 
 from matplotlib import patheffects
@@ -16,6 +20,29 @@ warnings.filterwarnings("ignore")
 import casparing.plot.CASPAR_plotting as cplot
 
 def insets(ax, a, wcs, ax_pos, bounds, manual_set=False):
+    '''
+    Function for adding inset boxes for all sky map. Used to zoom into specific regions of the sky. 
+    
+    Parameters
+    -------
+    ax: matplotlib.axis.Axes
+        single matplotlib ``Axis`` object 
+    a: 2D np.ndarray
+        background all sky map
+    wcs: astropy.wcs
+        astropy World Coordinate System of background all sky map
+    ax_pos: list(float)
+        position of axis (left, bottom, width, height) in matplotlib.figure coordinates
+    bounds: list(float)
+        x and y limits of inset figure in pixel coordinates (xmin, xmax, ymin, ymax)
+    manual_set: bool, default: False
+        manually set the inset coordinates (True) or use the WCS coordinates provided (True)
+    Returns
+    -------
+    axins: matplotlib.axis.Axes
+        The ``Axis`` object that can be used for further customization of inset.
+    '''
+    
     axins = ax.inset_axes(ax_pos)
     cmap = cm.binary_r
     if manual_set:
@@ -40,7 +67,7 @@ def insets(ax, a, wcs, ax_pos, bounds, manual_set=False):
     else:
         axinsY = axins.twinx().twiny()
         axinsX = axins.twinx()
-        gl, gb = wcs.wcs_pix2world([x1,x2], [y1, y2], 1)#, [x2, y2])
+        gl, gb = wcs.wcs_pix2world([x1,x2], [y1, y2], 1)
         print('gl', gl, 'gb', gb)
         axins.set_xlim(x1, x2)
         axins.set_ylim(y1, y2)
@@ -57,9 +84,27 @@ def insets(ax, a, wcs, ax_pos, bounds, manual_set=False):
     return axins
     
 def allsky(df_caspar, akari_file, **kwargs):
-    '''kwargs: savefig'''
-#    a = fits.getdata('../akari_mollweide_65_1_4096.fits')
-#    hdu = fits.open('../akari_mollweide_65_1_4096.fits')[1]
+    '''
+    Function to plot all of the CASPAR objects on an astropy.visualization.wcsaxes.frame.EllipticalFrame
+    Parameters
+    -------
+    df_caspar: pandas.DataFrame
+        pandas Dataframe of CASPAR or Literature Database after opened with casparing.CASPAR_sortdata.CASPAR_loaddata() 
+    
+    akari_file: str
+        path to fits 2D file with WCS coordinates of all sky.  We like using the akari all sky survey for plotting. 
+    
+    kwargs: 
+        savefig: str
+            path and filename to save file. 
+    
+    Returns
+    -------
+    NoneType
+        None
+    
+    '''
+    
     a = fits.getdata(akari_file)
     hdu = fits.open(akari_file)[1]
     wcs = WCS(hdu.header)

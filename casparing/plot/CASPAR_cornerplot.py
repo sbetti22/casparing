@@ -1,3 +1,7 @@
+'''
+plotting corner plot of physical parameters
+'''
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -8,6 +12,23 @@ from casparing.plot.CASPAR_util import AccDiagColor
 color = AccDiagColor()
 
 def corner_map(df_caspar, fs=20):
+    '''
+    Function to plot a corner plot of the physical parameters in CASPAR (Association, Spectral Type, Age, Mass, Luminosity, Accretion Luminosity, Accretion Rate, and Accretion Diagnostic)
+    
+    Parameters
+    -------
+    df_caspar: pandas.DataFrame
+        pandas Dataframe of CASPAR or Literature Database after opened with casparing.CASPAR_sortdata.CASPAR_loaddata() 
+    fs: int
+        fontsize of legend labels
+        
+    
+    Returns
+    -------
+    NoneType
+        None
+    
+    '''
     ###############
     name = ['Main Association', 'Sp Type Num', 'Age', 'log Mass', 'log Lum',  'Log Accretion Luminosity', 'log Mdot',  'AD']
     data = df_caspar[name]

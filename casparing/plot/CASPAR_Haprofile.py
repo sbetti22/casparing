@@ -1,9 +1,32 @@
+'''
+plotting or Ha profile mass ratios
+'''
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
 
 def Haprofile(df_lit, df_caspar, **kwargs):
+    '''
+    Function to plot the mass ratio of between different published masses derived from line profiles
+    
+    Parameters
+    -------
+    df_lit: pandas.DataFrame
+        pandas Dataframe of Literature Database after opened with casparing.CASPAR_sortdata.CASPAR_loaddata() 
+    
+    df_caspar: pandas.DataFrame
+        pandas Dataframe of CASPAR after opened with casparing.CASPAR_sortdata.CASPAR_loaddata() 
+    
+    kwargs: 
+        savefig: str
+            path and filename to save file. 
+    
+    Returns
+    -------
+    NoneType
+        None
+    '''
     
     bd_orig03 = df_lit.loc[(df_caspar['Original Reference']=='Muzerolle 2003') & (df_caspar['Accretion Diagnostic']=='Line Profile')]
     bd_update03 = df_caspar.loc[(df_caspar['Original Reference']=='Muzerolle 2003')& (df_caspar['Accretion Diagnostic']=='Line Profile')]

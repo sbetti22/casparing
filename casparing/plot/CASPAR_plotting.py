@@ -1,3 +1,9 @@
+'''
+Module with functionalities to assist with plotting different features of CASPAR
+
+WIP!
+'''
+
 import os
 import numpy as np
 import pandas as pd
@@ -5,6 +11,24 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as COLORS
 
 def plot_cluster(dist=False):
+    '''
+    function to provide associations and distances in CASPAR and give them a unique marker for plotting.
+    
+    Parameters
+    -------
+    dist: bool, default=False
+        boolean to include distances of each association
+    
+    Returns
+    -------
+    cluster: list
+        list of association names
+    marker: list
+        list of markers for scatter plotting
+    distance: list, (only if dist=True)
+        list of distances for each assocation
+    '''
+    
     cluster = ['25 Orionis','118 Tau', 'Argus','B Pictoris', 'Chamaeleon I','Corona-Australis', 'IC 348', 'Lagoon Nebula', 
                'Lupus', 'NGC 2024','n Chamaeleontis','p Oph','Sh 2-284', 'Taurus', 'Tucana-Horologium','TW Hya',
             'Upper Centaurus Lupus', 'Upper Scorpius', 'σ Ori', 
@@ -19,6 +43,26 @@ def plot_cluster(dist=False):
 
     
 def plot_age():
+    '''
+    function to provide markers, colors, and darker versions of each color for age bins [0-1, 1-3, 3-8, 8-45, 45+]
+    
+    Parameters
+    -------
+    NoneType
+        None
+    
+    Returns
+    -------
+    age: list
+        list of ages in Myr
+    marker: list
+        list of matplotlib.plot acceptable markers for each age
+    c: list
+        list of colors for each age
+    darkc: list
+        list of slightly darker colors for each age.
+    '''
+    
     age = [0,1, 3,8,45]
     marker = ['o', '*', 's', '^', 'D', '^']
     c = ['#FFB000', '#FE6100', '#DC267F', '#785EF0', '#648FFF', 'gray']
@@ -26,6 +70,32 @@ def plot_age():
     return age, marker, c, darkc
 
 def plot_objtype_legend(ax, cS, cBD, cP, fs=12,loc='upper right', labels_color=True):
+    '''
+    function to create legend specifically when stars, brown dwarfs, and planetary mass companions are separate colors and marker types
+
+    Parameters
+    -------
+    ax: matplotlib.axis.Axes
+        single matplotlib ``Axis`` object 
+    cS: str
+        color of star datapoints when plotting
+    cBD: str
+        color of brown dwarf datapoints when plotting
+    cP: str
+        color of planetary mass companion datapoints when plotting
+    fs: int, optional (default=12)
+        fontsize of axis labels in main plot.  The legend labels will be fs/2.
+    loc: str, optional (default='upper right')
+        location of legend in main plot.  Use matplotlib.pyplot.legend loc locations.
+    labels_color: bool, optinal (default=True)
+        make the text the same color as the marker colors
+    
+    Returns
+    -------
+    NoneType
+        None
+    '''
+    
     s1= ax.scatter([],[], color=cS, marker='o')
     s2= ax.scatter([],[], color=cBD,  marker='D')
     s3= ax.scatter([],[], color=cP,  marker='s')
@@ -40,11 +110,61 @@ def plot_objtype_legend(ax, cS, cBD, cP, fs=12,loc='upper right', labels_color=T
     leg.set_zorder(1000)
       
 def plot_createSinglePlot(figsize=(4,3)):
+    '''   
+    function to create a single matplotlib.pyplot figure and axis.
+    
+    Parameters
+    -------
+    figsize: tuple(float, float), optional (default=(4,3))
+        figure size.  Should follow matplotlib.pyplot figsize convention.
+    
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The ``Figure`` object that can be used for further
+        customization of the plot.
+    matplotlib.axis.Axes
+        The ``Axis`` object that can be used for further
+        customization of the plot.
+    '''
+    
     fig = plt.figure(figsize=figsize, dpi=300)
     ax = fig.add_subplot(111)
     return fig,ax
 
 def plot_create6multiplots(cols=2):
+    '''   
+    function to create a six panel matplotlib.pyplot figure and axis.
+    
+    Parameters
+    -------
+    cols: int, optional (default=2)
+        number of columns in figure.  rows will be 6/cols.  Must be either 2 or 3.
+    
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The ``Figure`` object that can be used for further
+        customization of the plot.
+    matplotlib.axis.Axes
+        The first ``Axis`` object that can be used for further
+        customization of the plot.
+    matplotlib.axis.Axes
+        The second ``Axis`` object that can be used for further
+        customization of the plot.
+    matplotlib.axis.Axes
+        The third ``Axis`` object that can be used for further
+        customization of the plot.
+    matplotlib.axis.Axes
+        The forth ``Axis`` object that can be used for further
+        customization of the plot.
+    matplotlib.axis.Axes
+        The fifth ``Axis`` object that can be used for further
+        customization of the plot.
+    matplotlib.axis.Axes
+        The sixth ``Axis`` object that can be used for further
+        customization of the plot.
+    '''
     if cols==2:
         fig, ((ax1, ax2), (ax3, ax4), (ax5, ax6)) = plt.subplots(figsize=(4.5,7), nrows=3,ncols=2,dpi=150, sharey=True)
     elif cols==3:
